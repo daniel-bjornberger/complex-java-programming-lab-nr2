@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;
 import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.MissingStudentValueException;
 
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ public class StudentModel {
     private String firstname;
     private String lastname;
     private String email;
-    private Set<String> subjects = new HashSet<>();
+    //private Set<String> subjects = new HashSet<>();
+    private List<String> subjects = new ArrayList<>();
 
 
     public StudentModel(Student student) {
@@ -30,7 +32,11 @@ public class StudentModel {
         this.lastname  = student.getLastName();
         this.email     = student.getEmail();
 
-        this.subjects  = student.getSubjects();
+        for (Object subject: student.getSubject()) {
+            this.subjects.add(((Subject) subject).getTitle());
+        }
+
+        //this.subjects  = student.getSubjects();
 
     }
 

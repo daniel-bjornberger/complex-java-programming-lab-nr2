@@ -9,7 +9,7 @@ import java.io.StringReader;
 import java.util.*;
 
 @Entity
-@Table(name="student")
+@Table(name = "student")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -39,15 +39,21 @@ public class Student implements Serializable {
                 inverseJoinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"))*/
     private Set<Subject> subject = new HashSet<>();
 
-    @Transient
-    private List<String> subjects = new ArrayList<>();
+
+    /*@Transient
+    private List<String> subjects = new ArrayList<>();*/
 
 
     public Student(StudentModel studentModel) {
+
         this.firstName = studentModel.getFirstname();
         this.lastName  = studentModel.getLastname();
         this.email     = studentModel.getEmail();
-        this.subjects  = studentModel.getSubjects();
+
+        for (Object subjectString: studentModel.getSubjects()) {
+            this.subject.add(new Subject((String) subjectString));
+        }
+
     }
 
 }

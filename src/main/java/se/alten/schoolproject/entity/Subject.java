@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "subject")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -53,6 +54,10 @@ public class Subject implements Serializable {
 
         return subject;
     }*/
+
+    public Subject(String titleString) {
+        this.title = titleString;
+    }
 
 
     public Subject(SubjectModel subjectModel) {
