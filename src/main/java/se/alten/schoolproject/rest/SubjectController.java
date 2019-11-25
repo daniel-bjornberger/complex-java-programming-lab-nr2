@@ -20,8 +20,9 @@ public class SubjectController {
     private SchoolAccessLocal sal;
 
     @GET
+    @Path("/getallsubjects")
     @Produces({"application/JSON"})
-    public Response listSubjects() {
+    public Response getAllSubjects() {
         try {
             List subject = sal.listAllSubjects();
             return Response.ok(subject).build();
@@ -31,13 +32,14 @@ public class SubjectController {
     }
 
     @POST
+    @Path("/addsubject")
     @Produces({"application/JSON"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addSubject(String subject) {
         try {
             SubjectModel subjectModel = sal.addSubject(subject);
             return Response.ok(subjectModel).build();
-        } catch (Exception e ) {
+        } catch (Exception e) {
             return Response.status(404).build();
         }
     }

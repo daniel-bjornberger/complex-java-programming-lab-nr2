@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Stateless
@@ -18,53 +17,95 @@ public class StudentTransaction implements StudentTransactionAccess{
     @PersistenceContext(unitName="school")
     private EntityManager entityManager;
 
+
     @Override
     public List listAllStudents() {
-        Query query = entityManager.createQuery("SELECT s FROM Student s JOIN FETCH s.subject t");
+
+        Query query = entityManager.createQuery("SELECT s from Student s");
         return query.getResultList();
+
     }
 
+
     @Override
-    public Student addStudent(Student studentToAdd) {
+    public void addStudent(Student student) throws TransactionExceptions.DuplicateEmailException {
+
         try {
-            entityManager.persist(studentToAdd);
+            entityManager.persist(student);
             entityManager.flush();
-            return studentToAdd;
-        } catch ( PersistenceException pe ) {
-            studentToAdd.setForename("duplicate");
-            return studentToAdd;
+        } catch (PersistenceException pe) {
+            throw new TransactionExceptions.DuplicateEmailException(student.getEmail());
         }
+
     }
 
+
     @Override
-    public void removeStudent(String student) {
-        //JPQL Query
+    public void removeStudent(String email) throws TransactionExceptions.EmailNotFoundException {
+
         Query query = entityManager.createQuery("DELETE FROM Student s WHERE s.email = :email");
 
-        //Native Query
-        //Query query = entityManager.createNativeQuery("DELETE FROM student WHERE email = :email", Student.class);
+        int numberOfStudentsRemoved = query.setParameter("email", email).executeUpdate();
 
-        query.setParameter("email", student)
-             .executeUpdate();
+        if (numberOfStudentsRemoved == 0) {
+            throw new TransactionExceptions.EmailNotFoundException(email);
+        }
+
     }
 
+
     @Override
-    public void updateStudent(String forename, String lastname, String email) {
-        Query updateQuery = entityManager.createNativeQuery("UPDATE student SET forename = :forename, lastname = :lastname WHERE email = :email", Student.class);
-        updateQuery.setParameter("forename", forename)
-                   .setParameter("lastname", lastname)
-                   .setParameter("email", email)
-                   .executeUpdate();
+    public void updateStudent(Student student) throws TransactionExceptions.EmailNotFoundException {
+
+        Query updateQuery = entityManager.createNativeQuery("UPDATE student SET firstname = :firstname, lastname = :lastname WHERE email = :email", Student.class);
+
+        int numberOfStudentsUpdated = updateQuery.setParameter("firstname", student.getFirstName())
+                .setParameter("lastname", student.getLastName())
+                .setParameter("email", student.getEmail())
+                .executeUpdate();
+
+        if (numberOfStudentsUpdated == 0) {
+            throw new TransactionExceptions.EmailNotFoundException(student.getEmail());
+        }
+
     }
 
-    @Override
-    public void updateStudentPartial(Student student) {
-        Student studentFound = (Student)entityManager.createQuery("SELECT s FROM Student s WHERE s.email = :email")
-                .setParameter("email", student.getEmail()).getSingleResult();
 
-        Query query = entityManager.createQuery("UPDATE Student SET forename = :studentForename WHERE email = :email");
-        query.setParameter("studentForename", student.getForename())
+    @Override
+    public void updateFirstName(Student student) throws TransactionExceptions.LastNameAndEmailNotFoundException {
+
+        Student studentFound;
+
+        try {
+            studentFound = (Student) entityManager
+                    .createQuery("SELECT s FROM Student s WHERE s.lastName = :lastname AND s.email = :email")
+                    .setParameter("lastname", student.getLastName())
+                    .setParameter("email", student.getEmail())
+                    .getSingleResult();
+        } catch (PersistenceException pe) {
+            throw new TransactionExceptions
+                    .LastNameAndEmailNotFoundException(student.getLastName(), student.getEmail());
+        }
+
+        Query query = entityManager
+                .createQuery("UPDATE Student SET firstname = :studentfirstname WHERE lastName = :lastname AND email = :email");
+
+        query.setParameter("studentfirstname", student.getFirstName())
+                .setParameter("lastname", studentFound.getLastName())
                 .setParameter("email", studentFound.getEmail())
                 .executeUpdate();
+
     }
+
+
+    @Override
+    public List findStudentsByLastName(String lastName) {
+
+        return entityManager
+                .createQuery("SELECT s FROM Student s WHERE s.lastName = :lastname")
+                .setParameter("lastname", lastName)
+                .getResultList();
+
+    }
+
 }

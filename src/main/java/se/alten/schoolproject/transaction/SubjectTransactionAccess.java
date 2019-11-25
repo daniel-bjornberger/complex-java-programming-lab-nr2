@@ -7,7 +7,11 @@ import java.util.List;
 
 @Local
 public interface SubjectTransactionAccess {
+
     List listAllSubjects();
-    Subject addSubject(Subject subject);
+
+    void addSubject(Subject subject);
+
     List<Subject> getSubjectByName(List<String> subject);
+
 }

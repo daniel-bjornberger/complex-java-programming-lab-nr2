@@ -1,5 +1,7 @@
 package se.alten.schoolproject.model;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import lombok.*;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
@@ -16,31 +18,44 @@ import java.util.Set;
 @ToString
 public class StudentModel {
 
-    private String forename;
+    private String firstname;
     private String lastname;
     private String email;
     private Set<String> subjects = new HashSet<>();
 
-    public StudentModel toModel(Student student) {
-        StudentModel studentModel = new StudentModel();
 
-        switch (student.getForename()) {
-            case "empty":
-                studentModel.setForename("empty");
-                return studentModel;
-            case "duplicate":
-                studentModel.setForename("duplicate");
-                return studentModel;
-            default:
-                studentModel.setForename(student.getForename());
-                studentModel.setLastname(student.getLastname());
-                studentModel.setEmail(student.getEmail());
-                student.getSubject().forEach(subject -> {
-                    studentModel.subjects.add(subject.getTitle());
-                });
-                return studentModel;
-        }
+    public StudentModel(Student student) {
+
+        this.setFirstname(student.getFirstName());
+        this.setLastname(student.getLastName());
+        this.setEmail(student.getEmail());
+        this.setSubjects(student.getSubjects());
+
     }
+
+
+    public StudentModel(String studentJsonString) throws JsonSyntaxException, ModelExceptions.MissingValueException {
+
+        StudentModel temp = new Gson().fromJson(studentJsonString, StudentModel.class);
+
+        if (empty(temp.getFirstname()) || empty(temp.getLastname()) || empty(temp.getEmail())) {
+            throw new ModelExceptions.MissingValueException();
+        }
+
+        this.firstname = temp.getFirstname();
+        this.lastname  = temp.getLastname();
+        this.email     = temp.getEmail();
+        this.subjects  = temp.getSubjects();
+
+    }
+
+
+    private static boolean empty(String string) {
+
+        return string == null || string.isBlank();
+
+    }
+
 
     public List<StudentModel> toModelList(List<Student> students) {
 
@@ -48,15 +63,19 @@ public class StudentModel {
 
         students.forEach(student -> {
             StudentModel sm = new StudentModel();
-            sm.forename = student.getForename();
-            sm.lastname = student.getLastname();
+            sm.firstname = student.getFirstName();
+            sm.lastname = student.getLastName();
             sm.email = student.getEmail();
             student.getSubject().forEach(subject -> {
                 sm.subjects.add(subject.getTitle());
             });
 
             studentModels.add(sm);
+
         });
+
         return studentModels;
+
     }
+
 }

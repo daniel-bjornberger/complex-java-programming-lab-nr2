@@ -25,7 +25,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
     }
 
     @Override
-    public Subject addSubject(Subject subject) {
+    public void addSubject(Subject subject) {
         try {
             entityManager.persist(subject);
             entityManager.flush();
@@ -44,5 +44,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         query.setParameter("subject", subject);
 
         return query.getResultList();
+
      }
+
 }

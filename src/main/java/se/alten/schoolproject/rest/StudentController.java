@@ -2,8 +2,9 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
-import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.model.ModelExceptions;
 import se.alten.schoolproject.model.StudentModel;
+import se.alten.schoolproject.transaction.TransactionExceptions;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -18,63 +19,117 @@ import java.util.List;
 public class StudentController {
 
     @Inject
-    private SchoolAccessLocal sal;
+    private SchoolAccessLocal schoolAccessLocal;
+
 
     @GET
+    @Path("/getallstudents")
     @Produces({"application/JSON"})
-    public Response showStudents() {
+    public Response getAllStudents() {
+
         try {
-            List students = sal.listAllStudents();
-            System.out.println(students.toString());
-            return Response.ok(students).build();
-        } catch ( Exception e ) {
+            List studentModelList = schoolAccessLocal.listAllStudents();
+            return Response.ok(studentModelList).build();
+        } catch (Exception e) {
             return Response.status(Response.Status.CONFLICT).build();
         }
+
     }
+
 
     @POST
-    @Path("/add")
+    @Path("/addstudent")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({"application/JSON"})
-    /**
-     * JavaDoc
-     */
-    public Response addStudent(String studentModel) {
+    public Response addStudent(String studentJsonString) {
+
         try {
-
-            StudentModel answer = sal.addStudent(studentModel);
-
-            switch ( answer.getForename()) {
-                case "empty":
-                    return Response.status(Response.Status.NOT_ACCEPTABLE).entity("{\"Fill in all details please\"}").build();
-                case "duplicate":
-                    return Response.status(Response.Status.EXPECTATION_FAILED).entity("{\"Email already registered!\"}").build();
-                default:
-                    return Response.ok(answer).build();
-            }
-        } catch ( Exception e ) {
+            StudentModel studentModel = schoolAccessLocal.addStudent(studentJsonString);
+            return Response.ok(studentModel).build();
+        } catch (ModelExceptions.MissingValueException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        } catch (TransactionExceptions.DuplicateEmailException e) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+
     }
+
 
     @DELETE
-    @Path("{email}")
-    public Response deleteUser( @PathParam("email") String email) {
+    @Path("deletestudent/{email}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"text/plain"})
+    public Response deleteStudent(@PathParam("email") String email) {
+
         try {
-            sal.removeStudent(email);
-            return Response.ok().build();
-        } catch ( Exception e ) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            schoolAccessLocal.removeStudent(email);
+            return Response.ok().type(MediaType.TEXT_PLAIN)
+                    .entity("The student was deleted from the database.").build();
+        } catch (TransactionExceptions.EmailNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
         }
+
     }
+
 
     @PUT
-    public void updateStudent( @QueryParam("forename") String forename, @QueryParam("lastname") String lastname, @QueryParam("email") String email) {
-        sal.updateStudent(forename, lastname, email);
+    @Path("updatestudent")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"application/JSON"})
+    public Response updateStudent(@QueryParam("firstname") String firstName, @QueryParam("lastname") String lastName, @QueryParam("email") String email) {
+
+        try {
+            StudentModel studentModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
+            return Response.ok(studentModel).build();
+        } catch (ModelExceptions.MissingValueException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        } catch (TransactionExceptions.EmailNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
     }
 
+
     @PATCH
-    public void updatePartialAStudent(String studentModel) {
-        sal.updateStudentPartial(studentModel);
+    @Path("updatefirstname")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({"application/JSON"})
+    public Response updateFirstName(String studentJsonString) {     // This method was originally called:
+        // 'updatePartialAStudent'
+        try {
+            StudentModel studentModel = schoolAccessLocal.updateFirstName(studentJsonString);
+            return Response.ok(studentModel).build();
+        } catch (ModelExceptions.MissingValueException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        } catch (TransactionExceptions.LastNameAndEmailNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
     }
+
+
+    @GET
+    @Path("findstudentsbylastname/{lastname}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"application/JSON"})
+    public Response findStudentsByLastName(@PathParam("lastname") String lastName) {
+
+        try {
+            List studentModelList = schoolAccessLocal.findStudentsByLastName(lastName);
+            return Response.ok(studentModelList).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
+    }
+
 }

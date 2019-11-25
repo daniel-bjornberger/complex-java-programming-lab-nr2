@@ -13,12 +13,12 @@
 
     <developers>
         <developer>
-            <name>Bjorn Kristensson Alfsson</name>
+            <name>Daniel Björnberger</name>
         </developer>
     </developers>
 
     <organization>
-        <name>Alten AB</name>
+        <name>ITHS</name>
     </organization>
 
     <dependencies>
@@ -90,6 +90,12 @@
             <version>${testcontainers.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -120,5 +126,6 @@
         <maven.compiler.target>11</maven.compiler.target>
         <testcontainers.version>1.12.2</testcontainers.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

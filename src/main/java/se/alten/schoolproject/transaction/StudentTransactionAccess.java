@@ -7,9 +7,17 @@ import java.util.List;
 
 @Local
 public interface StudentTransactionAccess {
+
     List listAllStudents();
-    Student addStudent(Student studentToAdd);
-    void removeStudent(String student);
-    void updateStudent(String forename, String lastname, String email);
-    void updateStudentPartial(Student studentToUpdate);
+
+    void addStudent(Student student) throws TransactionExceptions.DuplicateEmailException;
+
+    void removeStudent(String email) throws TransactionExceptions.EmailNotFoundException;
+
+    void updateStudent(Student student) throws TransactionExceptions.EmailNotFoundException;
+
+    void updateFirstName(Student student) throws TransactionExceptions.LastNameAndEmailNotFoundException;
+
+    List findStudentsByLastName(String lastName);
+
 }

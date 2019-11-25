@@ -1,7 +1,9 @@
 package se.alten.schoolproject.dao;
 
+import se.alten.schoolproject.model.ModelExceptions;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.transaction.TransactionExceptions;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -9,17 +11,20 @@ import java.util.List;
 @Local
 public interface SchoolAccessLocal {
 
-    List listAllStudents();
+    List listAllStudents() throws Exception;
 
-    StudentModel addStudent(String studentModel);
+    StudentModel addStudent(String studentJsonString) throws ModelExceptions.MissingValueException, TransactionExceptions.DuplicateEmailException;
 
-    void removeStudent(String student);
+    void removeStudent(String email) throws TransactionExceptions.EmailNotFoundException;
 
-    void updateStudent(String forename, String lastname, String email);
+    StudentModel updateStudent(String firstName, String lastName, String email) throws ModelExceptions.MissingValueException, TransactionExceptions.EmailNotFoundException;
 
-    void updateStudentPartial(String studentModel);
+    StudentModel updateFirstName(String studentJsonString) throws ModelExceptions.MissingValueException, TransactionExceptions.LastNameAndEmailNotFoundException;
+
+    List findStudentsByLastName(String lastName);
 
     List listAllSubjects();
 
     SubjectModel addSubject(String subjectModel);
+
 }

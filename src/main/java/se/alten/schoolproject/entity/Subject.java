@@ -2,6 +2,7 @@ package se.alten.schoolproject.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import se.alten.schoolproject.model.SubjectModel;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -20,19 +21,20 @@ import java.util.Set;
 @ToString
 public class Subject implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7606014062226993082L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column
+    @Column(name = "title")
     private String title;
 
     @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Student> students = new HashSet<>();
 
-    public Subject toEntity(String subjectModel) {
+    /*public Subject toEntity(String subjectModel) {
         JsonReader reader = Json.createReader(new StringReader(subjectModel));
 
         JsonObject jsonObject = reader.readObject();
@@ -47,5 +49,12 @@ public class Subject implements Serializable {
         }
 
         return subject;
+    }*/
+
+    public Subject(SubjectModel subjectModel) {
+        this.title = subjectModel.getTitle();
     }
+
+
+
 }

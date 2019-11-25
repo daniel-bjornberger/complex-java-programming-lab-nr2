@@ -10,12 +10,19 @@ import se.alten.schoolproject.entity.Subject;
 @ToString
 public class SubjectModel {
 
-    private Long id;
+    //private Long id;
     private String title;
 
-    public SubjectModel toModel(Subject subjectToAdd) {
+    /*public SubjectModel toModel(Subject subjectToAdd) {
         SubjectModel subjectModel = new SubjectModel();
         subjectModel.setTitle(subjectToAdd.getTitle());
         return subjectModel;
+    }*/
+
+
+    public SubjectModel(Subject subject) {
+        this.title = subject.getTitle();
     }
+
+
 }
