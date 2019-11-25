@@ -2,9 +2,11 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
-import se.alten.schoolproject.model.ModelExceptions;
+import se.alten.schoolproject.exceptions.DuplicateEmailException;
+import se.alten.schoolproject.exceptions.EmailNotFoundException;
+import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
+import se.alten.schoolproject.exceptions.MissingValueException;
 import se.alten.schoolproject.model.StudentModel;
-import se.alten.schoolproject.transaction.TransactionExceptions;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -46,10 +48,10 @@ public class StudentController {
         try {
             StudentModel studentModel = schoolAccessLocal.addStudent(studentJsonString);
             return Response.ok(studentModel).build();
-        } catch (ModelExceptions.MissingValueException e) {
+        } catch (MissingValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (TransactionExceptions.DuplicateEmailException e) {
+        } catch (DuplicateEmailException e) {
             return Response.status(Response.Status.CONFLICT).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         } catch (Exception e) {
@@ -69,7 +71,7 @@ public class StudentController {
             schoolAccessLocal.removeStudent(email);
             return Response.ok().type(MediaType.TEXT_PLAIN)
                     .entity("The student was deleted from the database.").build();
-        } catch (TransactionExceptions.EmailNotFoundException e) {
+        } catch (EmailNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -86,10 +88,10 @@ public class StudentController {
         try {
             StudentModel studentModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
             return Response.ok(studentModel).build();
-        } catch (ModelExceptions.MissingValueException e) {
+        } catch (MissingValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (TransactionExceptions.EmailNotFoundException e) {
+        } catch (EmailNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -106,10 +108,10 @@ public class StudentController {
         try {
             StudentModel studentModel = schoolAccessLocal.updateFirstName(studentJsonString);
             return Response.ok(studentModel).build();
-        } catch (ModelExceptions.MissingValueException e) {
+        } catch (MissingValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (TransactionExceptions.LastNameAndEmailNotFoundException e) {
+        } catch (LastNameAndEmailNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }

@@ -29,10 +29,8 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         try {
             entityManager.persist(subject);
             entityManager.flush();
-            return subject;
         } catch ( PersistenceException pe ) {
             subject.setTitle("duplicate");
-            return subject;
         }
     }
 

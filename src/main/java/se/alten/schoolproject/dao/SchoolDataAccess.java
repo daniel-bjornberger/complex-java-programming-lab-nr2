@@ -3,20 +3,19 @@ package se.alten.schoolproject.dao;
 import com.google.gson.JsonObject;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
-import se.alten.schoolproject.model.ModelExceptions;
+import se.alten.schoolproject.exceptions.DuplicateEmailException;
+import se.alten.schoolproject.exceptions.EmailNotFoundException;
+import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
+import se.alten.schoolproject.exceptions.MissingValueException;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import se.alten.schoolproject.transaction.SubjectTransactionAccess;
-import se.alten.schoolproject.transaction.TransactionExceptions;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Stateless
 public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
@@ -49,7 +48,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel addStudent(String studentJsonString) throws ModelExceptions.MissingValueException, TransactionExceptions.DuplicateEmailException {
+    public StudentModel addStudent(String studentJsonString) throws MissingValueException, DuplicateEmailException {
 
         StudentModel studentModel = new StudentModel(studentJsonString);
 
@@ -61,7 +60,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public void removeStudent(String email) throws TransactionExceptions.EmailNotFoundException {
+    public void removeStudent(String email) throws EmailNotFoundException {
 
         studentTransactionAccess.removeStudent(email);
 
@@ -69,7 +68,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel updateStudent(String firstName, String lastName, String email) throws ModelExceptions.MissingValueException, TransactionExceptions.EmailNotFoundException {
+    public StudentModel updateStudent(String firstName, String lastName, String email) throws MissingValueException, EmailNotFoundException {
 
         JsonObject studentJson = new JsonObject();
 
@@ -87,7 +86,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel updateFirstName(String studentJsonString) throws ModelExceptions.MissingValueException, TransactionExceptions.LastNameAndEmailNotFoundException {
+    public StudentModel updateFirstName(String studentJsonString) throws MissingValueException, LastNameAndEmailNotFoundException {
 
         StudentModel studentModel = new StudentModel(studentJsonString);
 

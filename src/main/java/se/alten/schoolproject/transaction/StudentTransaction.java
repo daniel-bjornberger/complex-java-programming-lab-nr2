@@ -1,6 +1,9 @@
 package se.alten.schoolproject.transaction;
 
 import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.exceptions.DuplicateEmailException;
+import se.alten.schoolproject.exceptions.EmailNotFoundException;
+import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
@@ -28,34 +31,34 @@ public class StudentTransaction implements StudentTransactionAccess{
 
 
     @Override
-    public void addStudent(Student student) throws TransactionExceptions.DuplicateEmailException {
+    public void addStudent(Student student) throws DuplicateEmailException {
 
         try {
             entityManager.persist(student);
             entityManager.flush();
         } catch (PersistenceException pe) {
-            throw new TransactionExceptions.DuplicateEmailException(student.getEmail());
+            throw new DuplicateEmailException(student.getEmail());
         }
 
     }
 
 
     @Override
-    public void removeStudent(String email) throws TransactionExceptions.EmailNotFoundException {
+    public void removeStudent(String email) throws EmailNotFoundException {
 
         Query query = entityManager.createQuery("DELETE FROM Student s WHERE s.email = :email");
 
         int numberOfStudentsRemoved = query.setParameter("email", email).executeUpdate();
 
         if (numberOfStudentsRemoved == 0) {
-            throw new TransactionExceptions.EmailNotFoundException(email);
+            throw new EmailNotFoundException(email);
         }
 
     }
 
 
     @Override
-    public void updateStudent(Student student) throws TransactionExceptions.EmailNotFoundException {
+    public void updateStudent(Student student) throws EmailNotFoundException {
 
         Query updateQuery = entityManager.createNativeQuery("UPDATE student SET firstname = :firstname, lastname = :lastname WHERE email = :email", Student.class);
 
@@ -65,14 +68,14 @@ public class StudentTransaction implements StudentTransactionAccess{
                 .executeUpdate();
 
         if (numberOfStudentsUpdated == 0) {
-            throw new TransactionExceptions.EmailNotFoundException(student.getEmail());
+            throw new EmailNotFoundException(student.getEmail());
         }
 
     }
 
 
     @Override
-    public void updateFirstName(Student student) throws TransactionExceptions.LastNameAndEmailNotFoundException {
+    public void updateFirstName(Student student) throws LastNameAndEmailNotFoundException {
 
         Student studentFound;
 
@@ -83,8 +86,7 @@ public class StudentTransaction implements StudentTransactionAccess{
                     .setParameter("email", student.getEmail())
                     .getSingleResult();
         } catch (PersistenceException pe) {
-            throw new TransactionExceptions
-                    .LastNameAndEmailNotFoundException(student.getLastName(), student.getEmail());
+            throw new LastNameAndEmailNotFoundException(student.getLastName(), student.getEmail());
         }
 
         Query query = entityManager
