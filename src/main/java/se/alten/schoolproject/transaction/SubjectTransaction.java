@@ -1,8 +1,8 @@
 package se.alten.schoolproject.transaction;
 
 import org.hibernate.Session;
-import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.exceptions.DuplicateTitleException;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
@@ -18,21 +18,28 @@ public class SubjectTransaction implements SubjectTransactionAccess{
     @PersistenceContext(unitName="school")
     private EntityManager entityManager;
 
-    @Override
-    public List listAllSubjects() {
-        Query query = entityManager.createQuery("SELECT s FROM Subject s");
-        return query.getResultList();
-    }
 
     @Override
-    public void addSubject(Subject subject) {
+    public List listAllSubjects() {
+
+        Query query = entityManager.createQuery("SELECT s FROM Subject s");
+        return query.getResultList();
+
+    }
+
+
+    @Override
+    public void addSubject(Subject subject) throws DuplicateTitleException {
+
         try {
             entityManager.persist(subject);
             entityManager.flush();
-        } catch ( PersistenceException pe ) {
-            subject.setTitle("duplicate");
+        } catch (PersistenceException pe) {
+            throw new DuplicateTitleException(subject.getTitle());
         }
+
     }
+
 
     @Override
     public List<Subject> getSubjectByName(List<String> subject) {

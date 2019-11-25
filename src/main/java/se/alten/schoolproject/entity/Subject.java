@@ -28,10 +28,13 @@ public class Subject implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     private String title;
 
     @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "subject_student",
+            joinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "stud_id", referencedColumnName = "id"))
     private Set<Student> students = new HashSet<>();
 
     /*public Subject toEntity(String subjectModel) {
@@ -51,10 +54,9 @@ public class Subject implements Serializable {
         return subject;
     }*/
 
+
     public Subject(SubjectModel subjectModel) {
         this.title = subjectModel.getTitle();
     }
-
-
 
 }

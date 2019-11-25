@@ -2,6 +2,8 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
+import se.alten.schoolproject.exceptions.DuplicateTitleException;
+import se.alten.schoolproject.exceptions.MissingTitleValueException;
 import se.alten.schoolproject.model.SubjectModel;
 
 import javax.ejb.Stateless;
@@ -17,30 +19,50 @@ import java.util.List;
 public class SubjectController {
 
     @Inject
-    private SchoolAccessLocal sal;
+    private SchoolAccessLocal schoolAccessLocal;
+
 
     @GET
     @Path("/getallsubjects")
     @Produces({"application/JSON"})
     public Response getAllSubjects() {
+
         try {
-            List subject = sal.listAllSubjects();
-            return Response.ok(subject).build();
-        } catch ( Exception e ) {
+            List subjectModelList = schoolAccessLocal.listAllSubjects();
+            return Response.ok(subjectModelList).build();
+        } catch (Exception e) {
             return Response.status(Response.Status.CONFLICT).build();
         }
+
     }
+
 
     @POST
     @Path("/addsubject")
     @Produces({"application/JSON"})
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addSubject(String subject) {
-        try {
+    public Response addSubject(String subjectJsonString) {
+
+        /*try {
             SubjectModel subjectModel = sal.addSubject(subject);
             return Response.ok(subjectModel).build();
         } catch (Exception e) {
             return Response.status(404).build();
+        }*/
+
+        try {
+            SubjectModel subjectModel = schoolAccessLocal.addSubject(subjectJsonString);
+            return Response.ok(subjectModel).build();
+        } catch (MissingTitleValueException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        } catch (DuplicateTitleException e) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
+
     }
+
 }

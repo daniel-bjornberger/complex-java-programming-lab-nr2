@@ -3,10 +3,7 @@ package se.alten.schoolproject.dao;
 import com.google.gson.JsonObject;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
-import se.alten.schoolproject.exceptions.DuplicateEmailException;
-import se.alten.schoolproject.exceptions.EmailNotFoundException;
-import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
-import se.alten.schoolproject.exceptions.MissingValueException;
+import se.alten.schoolproject.exceptions.*;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
@@ -48,7 +45,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel addStudent(String studentJsonString) throws MissingValueException, DuplicateEmailException {
+    public StudentModel addStudent(String studentJsonString) throws MissingStudentValueException, DuplicateEmailException {
 
         StudentModel studentModel = new StudentModel(studentJsonString);
 
@@ -68,7 +65,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel updateStudent(String firstName, String lastName, String email) throws MissingValueException, EmailNotFoundException {
+    public StudentModel updateStudent(String firstName, String lastName, String email) throws MissingStudentValueException, EmailNotFoundException {
 
         JsonObject studentJson = new JsonObject();
 
@@ -86,7 +83,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel updateFirstName(String studentJsonString) throws MissingValueException, LastNameAndEmailNotFoundException {
+    public StudentModel updateFirstName(String studentJsonString) throws MissingStudentValueException, LastNameAndEmailNotFoundException {
 
         StudentModel studentModel = new StudentModel(studentJsonString);
 
@@ -114,15 +111,34 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public List listAllSubjects() {
-        return subjectTransactionAccess.listAllSubjects();
+
+        //return subjectTransactionAccess.listAllSubjects();
+
+        List subjectList = subjectTransactionAccess.listAllSubjects();
+        List<SubjectModel> subjectModelList = new ArrayList<>();
+
+        for (Object subject: subjectList) {
+            subjectModelList.add(new SubjectModel((Subject) subject));
+        }
+
+        return subjectModelList;
+
     }
 
 
     @Override
-    public SubjectModel addSubject(String newSubject) {
-        Subject subjectToAdd = subject.toEntity(newSubject);
+    public SubjectModel addSubject(String subjectJsonString) throws DuplicateTitleException, MissingTitleValueException {
+
+        /*Subject subjectToAdd = subject.toEntity(newSubject);
         subjectTransactionAccess.addSubject(subjectToAdd);
-        return subjectModel.toModel(subjectToAdd);
+        return subjectModel.toModel(subjectToAdd);*/
+
+        SubjectModel subjectModel = new SubjectModel(subjectJsonString);
+
+        subjectTransactionAccess.addSubject(new Subject(subjectModel));
+
+        return subjectModel;
+
     }
 
 }

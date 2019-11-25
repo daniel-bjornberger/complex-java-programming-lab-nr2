@@ -1,6 +1,7 @@
 package se.alten.schoolproject.transaction;
 
 import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.exceptions.DuplicateTitleException;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -10,7 +11,7 @@ public interface SubjectTransactionAccess {
 
     List listAllSubjects();
 
-    void addSubject(Subject subject);
+    void addSubject(Subject subject) throws DuplicateTitleException;
 
     List<Subject> getSubjectByName(List<String> subject);
 
