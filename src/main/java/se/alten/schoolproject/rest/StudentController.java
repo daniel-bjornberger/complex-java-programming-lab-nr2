@@ -5,7 +5,7 @@ import se.alten.schoolproject.dao.SchoolAccessLocal;
 import se.alten.schoolproject.exceptions.DuplicateEmailException;
 import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
-import se.alten.schoolproject.exceptions.MissingStudentValueException;
+import se.alten.schoolproject.exceptions.MissingPersonValueException;
 import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
@@ -48,7 +48,7 @@ public class StudentController {
         try {
             StudentModel studentModel = schoolAccessLocal.addStudent(studentJsonString);
             return Response.ok(studentModel).build();
-        } catch (MissingStudentValueException e) {
+        } catch (MissingPersonValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         } catch (DuplicateEmailException e) {
@@ -88,7 +88,7 @@ public class StudentController {
         try {
             StudentModel studentModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
             return Response.ok(studentModel).build();
-        } catch (MissingStudentValueException e) {
+        } catch (MissingPersonValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         } catch (EmailNotFoundException e) {
@@ -108,7 +108,7 @@ public class StudentController {
         try {
             StudentModel studentModel = schoolAccessLocal.updateFirstName(studentJsonString);
             return Response.ok(studentModel).build();
-        } catch (MissingStudentValueException e) {
+        } catch (MissingPersonValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         } catch (LastNameAndEmailNotFoundException e) {

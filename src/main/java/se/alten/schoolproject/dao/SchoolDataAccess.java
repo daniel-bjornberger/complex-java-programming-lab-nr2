@@ -45,7 +45,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel addStudent(String studentJsonString) throws MissingStudentValueException, DuplicateEmailException {
+    public StudentModel addStudent(String studentJsonString) throws MissingPersonValueException, DuplicateEmailException {
 
         StudentModel studentModel = new StudentModel(studentJsonString);
 
@@ -65,7 +65,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel updateStudent(String firstName, String lastName, String email) throws MissingStudentValueException, EmailNotFoundException {
+    public StudentModel updateStudent(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException {
 
         JsonObject studentJson = new JsonObject();
 
@@ -83,7 +83,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public StudentModel updateFirstName(String studentJsonString) throws MissingStudentValueException, LastNameAndEmailNotFoundException {
+    public StudentModel updateFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException {
 
         StudentModel studentModel = new StudentModel(studentJsonString);
 

@@ -12,13 +12,13 @@ public interface SchoolAccessLocal {
 
     List listAllStudents() throws Exception;
 
-    StudentModel addStudent(String studentJsonString) throws MissingStudentValueException, DuplicateEmailException;
+    StudentModel addStudent(String studentJsonString) throws MissingPersonValueException, DuplicateEmailException;
 
     void removeStudent(String email) throws EmailNotFoundException;
 
-    StudentModel updateStudent(String firstName, String lastName, String email) throws MissingStudentValueException, EmailNotFoundException;
+    StudentModel updateStudent(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException;
 
-    StudentModel updateFirstName(String studentJsonString) throws MissingStudentValueException, LastNameAndEmailNotFoundException;
+    StudentModel updateFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
 
     List findStudentsByLastName(String lastName);
 

@@ -5,12 +5,10 @@ import com.google.gson.JsonSyntaxException;
 import lombok.*;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
-import se.alten.schoolproject.exceptions.MissingStudentValueException;
+import se.alten.schoolproject.exceptions.MissingPersonValueException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -41,12 +39,12 @@ public class StudentModel {
     }
 
 
-    public StudentModel(String studentJsonString) throws JsonSyntaxException, MissingStudentValueException {
+    public StudentModel(String studentJsonString) throws JsonSyntaxException, MissingPersonValueException {
 
         StudentModel temp = new Gson().fromJson(studentJsonString, StudentModel.class);
 
         if (empty(temp.getFirstname()) || empty(temp.getLastname()) || empty(temp.getEmail())) {
-            throw new MissingStudentValueException();
+            throw new MissingPersonValueException();
         }
 
         this.firstname = temp.getFirstname();
@@ -64,7 +62,7 @@ public class StudentModel {
     }
 
 
-    public List<StudentModel> toModelList(List<Student> students) {
+    /*public List<StudentModel> toModelList(List<Student> students) {
 
         List<StudentModel> studentModels = new ArrayList<>();
 
@@ -83,6 +81,6 @@ public class StudentModel {
 
         return studentModels;
 
-    }
+    }*/
 
 }
