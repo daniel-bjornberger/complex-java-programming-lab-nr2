@@ -32,7 +32,7 @@ public class Subject implements Serializable {
     @Column(name = "title", unique = true)
     private String title;
 
-    @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "subject_student",
             joinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "stud_id", referencedColumnName = "id"))
