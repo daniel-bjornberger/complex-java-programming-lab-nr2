@@ -1,11 +1,10 @@
 package se.alten.schoolproject.entity;
 
 import lombok.*;
-import se.alten.schoolproject.model.StudentModel;
+import se.alten.schoolproject.model.PersonModel;
 //import javax.json.*;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.io.StringReader;
 import java.util.*;
 
 @Entity
@@ -44,16 +43,19 @@ public class Student implements Serializable {
     private List<String> subjects = new ArrayList<>();*/
 
 
-    public Student(StudentModel studentModel) {
+    public Student(PersonModel personModel) {
 
-        this.firstName = studentModel.getFirstname();
-        this.lastName  = studentModel.getLastname();
-        this.email     = studentModel.getEmail();
+        this.firstName = personModel.getFirstname();
+        this.lastName  = personModel.getLastname();
+        this.email     = personModel.getEmail();
 
-        for (Object subjectString: studentModel.getSubjects()) {
+        for (Object subjectString: personModel.getSubjects()) {
             this.subject.add(new Subject((String) subjectString));
         }
 
     }
 
 }
+
+
+// Bytte StudentModel till PersonModel.

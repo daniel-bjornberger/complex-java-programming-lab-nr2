@@ -3,7 +3,7 @@ package se.alten.schoolproject.model;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;
-import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.entity.Person;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.MissingPersonValueException;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class StudentModel {
+public class PersonModel {
 
     private String firstname;
     private String lastname;
@@ -24,13 +24,13 @@ public class StudentModel {
     private List<String> subjects = new ArrayList<>();
 
 
-    public StudentModel(Student student) {
+    public PersonModel(Person person) {
 
-        this.firstname = student.getFirstName();
-        this.lastname  = student.getLastName();
-        this.email     = student.getEmail();
+        this.firstname = person.getFirstName();
+        this.lastname  = person.getLastName();
+        this.email     = person.getEmail();
 
-        for (Object subject: student.getSubject()) {
+        for (Object subject: person.getSubject()) {
             this.subjects.add(((Subject) subject).getTitle());
         }
 
@@ -39,9 +39,9 @@ public class StudentModel {
     }
 
 
-    public StudentModel(String studentJsonString) throws JsonSyntaxException, MissingPersonValueException {
+    public PersonModel(String personJsonString) throws JsonSyntaxException, MissingPersonValueException {
 
-        StudentModel temp = new Gson().fromJson(studentJsonString, StudentModel.class);
+        PersonModel temp = new Gson().fromJson(personJsonString, PersonModel.class);
 
         if (empty(temp.getFirstname()) || empty(temp.getLastname()) || empty(temp.getEmail())) {
             throw new MissingPersonValueException();
@@ -62,12 +62,12 @@ public class StudentModel {
     }
 
 
-    /*public List<StudentModel> toModelList(List<Student> students) {
+    /*public List<PersonModel> toModelList(List<Student> students) {
 
-        List<StudentModel> studentModels = new ArrayList<>();
+        List<PersonModel> studentModels = new ArrayList<>();
 
         students.forEach(student -> {
-            StudentModel sm = new StudentModel();
+            PersonModel sm = new PersonModel();
             sm.firstname = student.getFirstName();
             sm.lastname = student.getLastName();
             sm.email = student.getEmail();
@@ -84,3 +84,6 @@ public class StudentModel {
     }*/
 
 }
+
+
+// Bytt namn, från StudentModel till PersonModel

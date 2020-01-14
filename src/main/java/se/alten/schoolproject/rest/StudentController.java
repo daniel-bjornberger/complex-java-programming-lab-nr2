@@ -6,7 +6,7 @@ import se.alten.schoolproject.exceptions.DuplicateEmailException;
 import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
 import se.alten.schoolproject.exceptions.MissingPersonValueException;
-import se.alten.schoolproject.model.StudentModel;
+import se.alten.schoolproject.model.PersonModel;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -46,8 +46,8 @@ public class StudentController {
     public Response addStudent(String studentJsonString) {
 
         try {
-            StudentModel studentModel = schoolAccessLocal.addStudent(studentJsonString);
-            return Response.ok(studentModel).build();
+            PersonModel personModel = schoolAccessLocal.addStudent(studentJsonString);
+            return Response.ok(personModel).build();
         } catch (MissingPersonValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
@@ -86,8 +86,8 @@ public class StudentController {
     public Response updateStudent(@QueryParam("firstname") String firstName, @QueryParam("lastname") String lastName, @QueryParam("email") String email) {
 
         try {
-            StudentModel studentModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
-            return Response.ok(studentModel).build();
+            PersonModel personModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
+            return Response.ok(personModel).build();
         } catch (MissingPersonValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
@@ -99,6 +99,10 @@ public class StudentController {
     }
 
 
+    // Använd inte NOT_ACCEPTABLE!
+
+
+
     @PATCH
     @Path("updatefirstname")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -106,8 +110,8 @@ public class StudentController {
     public Response updateFirstName(String studentJsonString) {
 
         try {
-            StudentModel studentModel = schoolAccessLocal.updateFirstName(studentJsonString);
-            return Response.ok(studentModel).build();
+            PersonModel personModel = schoolAccessLocal.updateFirstName(studentJsonString);
+            return Response.ok(personModel).build();
         } catch (MissingPersonValueException e) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
@@ -135,3 +139,6 @@ public class StudentController {
     }
 
 }
+
+
+// Bytte StudentModel till PersonModel.

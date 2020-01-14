@@ -3,7 +3,9 @@ package se.alten.schoolproject.rest;
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
+import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.MissingTitleValueException;
+import se.alten.schoolproject.exceptions.TitleNotFoundException;
 import se.alten.schoolproject.model.SubjectModel;
 
 import javax.ejb.Stateless;
@@ -65,4 +67,27 @@ public class SubjectController {
 
     }
 
+    // Använd inte NOT_ACCEPTABLE!
+
+
+    @DELETE
+    @Path("deletesubject/{title}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"text/plain"})
+    public Response deleteSubject(@PathParam("title") String title) {
+
+        try {
+            schoolAccessLocal.removeSubject(title);
+            return Response.ok().type(MediaType.TEXT_PLAIN)
+                    .entity("The subject was deleted from the database.").build();
+        } catch (TitleNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
+    }
+
 }
+
+
+// Lade till deleteSubject.
