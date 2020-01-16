@@ -16,17 +16,29 @@ public interface SchoolAccessLocal {
 
     PersonModel addStudent(String studentJsonString) throws MissingPersonValueException, DuplicateEmailException;
 
-    void removeStudent(String email) throws EmailNotFoundException;
+    PersonModel addTeacher(String teacherJsonString) throws MissingPersonValueException, DuplicateEmailException;
+
+    void deleteStudent(String email) throws EmailNotFoundException;
+
+    void deleteTeacher(String email) throws EmailNotFoundException;
 
     PersonModel updateStudent(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException;
 
-    PersonModel updateFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
+    PersonModel updateTeacher(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException;
+
+    PersonModel updateStudentFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
+
+    PersonModel updateTeacherFirstName(String teacherJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
 
     List findStudentsByLastName(String lastName);
+
+    List findTeachersByLastName(String lastName);
 
     List listAllSubjects();
 
     SubjectModel addSubject(String subjectModel) throws DuplicateTitleException, MissingTitleValueException;
+
+    void deleteSubject(String title) throws TitleNotFoundException;
 
 }
 

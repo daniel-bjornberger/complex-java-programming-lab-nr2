@@ -15,7 +15,7 @@ public interface PersonTransactionAccess {
 
     void addPerson(Person person) throws DuplicateEmailException;
 
-    void removePerson(String email) throws EmailNotFoundException;
+    void deletePerson(String email) throws EmailNotFoundException;
 
     void updatePerson(Person person) throws EmailNotFoundException;
 

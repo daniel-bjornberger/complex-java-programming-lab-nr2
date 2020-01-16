@@ -2,7 +2,6 @@ package se.alten.schoolproject.dao;
 
 import com.google.gson.JsonObject;
 import se.alten.schoolproject.entity.Person;
-import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.*;
 import se.alten.schoolproject.model.PersonModel;
@@ -68,9 +67,37 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public PersonModel addStudent(String studentJsonString) throws MissingPersonValueException, DuplicateEmailException {
 
-        PersonModel personModel = new PersonModel(studentJsonString);
+        /*PersonModel personModel = new PersonModel(studentJsonString);
 
-        studentTransactionAccess.addStudent(new Student(personModel));
+        studentTransactionAccess.addPerson(new Person(personModel));
+
+        return personModel;*/
+
+        return addPerson(studentJsonString, studentTransactionAccess);
+
+    }
+
+
+    @Override
+    public PersonModel addTeacher(String teacherJsonString) throws MissingPersonValueException, DuplicateEmailException {
+
+        /*PersonModel personModel = new PersonModel(teacherJsonString);
+
+        teacherTransactionAccess.addPerson(new Person(personModel));
+
+        return personModel;*/
+
+        return addPerson(teacherJsonString, teacherTransactionAccess);
+
+    }
+
+
+    private PersonModel addPerson(String personJsonString,
+                                  PersonTransactionAccess personTransactionAccess) throws MissingPersonValueException {
+
+        PersonModel personModel = new PersonModel(personJsonString);
+
+        personTransactionAccess.addPerson(new Person(personModel));
 
         return personModel;
 
@@ -78,9 +105,17 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public void removeStudent(String email) throws EmailNotFoundException {
+    public void deleteStudent(String email) throws EmailNotFoundException {
 
-        studentTransactionAccess.removeStudent(email);
+        studentTransactionAccess.deletePerson(email);
+
+    }
+
+
+    @Override
+    public void deleteTeacher(String email) throws EmailNotFoundException {
+
+        teacherTransactionAccess.deletePerson(email);
 
     }
 
@@ -88,7 +123,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public PersonModel updateStudent(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException {
 
-        JsonObject studentJson = new JsonObject();
+        /*JsonObject studentJson = new JsonObject();
 
         studentJson.addProperty("firstname", firstName);
         studentJson.addProperty("lastname", lastName);
@@ -98,17 +133,74 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         studentTransactionAccess.updateStudent(new Student(personModel));
 
-        return personModel;
+        return personModel;*/
+
+        return updatePerson(firstName, lastName, email, studentTransactionAccess);
 
     }
 
 
     @Override
-    public PersonModel updateFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException {
+    public PersonModel updateTeacher(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException {
 
-        PersonModel personModel = new PersonModel(studentJsonString);
+        return updatePerson(firstName, lastName, email, teacherTransactionAccess);
 
-        studentTransactionAccess.updateFirstName(new Student(personModel));
+    }
+
+
+    private PersonModel updatePerson(String firstName,
+                                     String lastName, String email,
+                                     PersonTransactionAccess personTransactionAccess) throws MissingPersonValueException, EmailNotFoundException {
+
+        JsonObject personJson = new JsonObject();
+
+        personJson.addProperty("firstname", firstName);
+        personJson.addProperty("lastname", lastName);
+        personJson.addProperty("email", email);
+
+        PersonModel personModel = new PersonModel(personJson.toString());
+
+        personTransactionAccess.updatePerson(new Person(personModel));
+
+        return personModel;
+
+    }
+
+//--------------------------------------------------
+    @Override
+    public PersonModel updateStudentFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException {
+
+        /*PersonModel personModel = new PersonModel(studentJsonString);
+
+        studentTransactionAccess.updateFirstName(new Person(personModel));
+
+        return personModel;*/
+
+        return updateFirstName(studentJsonString, studentTransactionAccess);
+
+    }
+
+
+    @Override
+    public PersonModel updateTeacherFirstName(String teacherJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException {
+
+        /*PersonModel personModel = new PersonModel(teacherJsonString);
+
+        studentTransactionAccess.updateFirstName(new Person(personModel));
+
+        return personModel;*/
+
+        return updateFirstName(teacherJsonString, teacherTransactionAccess);
+
+    }
+
+
+    private PersonModel updateFirstName(String personJsonString,
+                                        PersonTransactionAccess personTransactionAccess) throws MissingPersonValueException, LastNameAndEmailNotFoundException {
+
+        PersonModel personModel = new PersonModel(personJsonString);
+
+        personTransactionAccess.updateFirstName(new Person(personModel));
 
         return personModel;
 
@@ -118,11 +210,44 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List findStudentsByLastName(String lastName) {
 
-        List studentList = studentTransactionAccess.findStudentsByLastName(lastName);
+        /*List studentList = studentTransactionAccess.findStudentsByLastName(lastName);
         List<PersonModel> personModelList = new ArrayList<>();
 
         for (Object student: studentList) {
+            personModelList.add(new PersonModel((Person) student));
+        }
+
+        return personModelList;*/
+
+        return findPersonsByLastName(lastName, studentTransactionAccess);
+
+    }
+
+
+    @Override
+    public List findTeachersByLastName(String lastName) {
+
+        /*List teacherList = teacherTransactionAccess.findTeachersByLastName(lastName);
+        List<PersonModel> personModelList = new ArrayList<>();
+
+        for (Object student: teacherList) {
             personModelList.add(new PersonModel((Student) student));
+        }
+
+        return personModelList;*/
+
+        return findPersonsByLastName(lastName, teacherTransactionAccess);
+
+    }
+
+
+    private List findPersonsByLastName(String lastName, PersonTransactionAccess personTransactionAccess) {
+
+        List personList = personTransactionAccess.findPersonsByLastName(lastName);
+        List<PersonModel> personModelList = new ArrayList<>();
+
+        for (Object person: personList) {
+            personModelList.add(new PersonModel((Person) person));
         }
 
         return personModelList;
@@ -161,6 +286,9 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return subjectModel;
 
     }
+
+
+    // Lägg till deleteSubject.
 
 }
 

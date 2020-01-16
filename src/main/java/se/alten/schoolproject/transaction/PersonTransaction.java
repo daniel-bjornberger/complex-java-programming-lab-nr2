@@ -53,14 +53,14 @@ public class PersonTransaction implements PersonTransactionAccess {
 
 
     @Override
-    public void removePerson(String email) throws EmailNotFoundException {
+    public void deletePerson(String email) throws EmailNotFoundException {
 
         //Query query = entityManager.createQuery("DELETE FROM Student p WHERE p.email = :email");
         Query query = entityManager.createQuery("DELETE FROM " + this.personType + " p WHERE p.email = :email");
 
-        int numberOfPersonsRemoved = query.setParameter("email", email).executeUpdate();
+        int numberOfPersonsDeleted = query.setParameter("email", email).executeUpdate();
 
-        if (numberOfPersonsRemoved == 0) {
+        if (numberOfPersonsDeleted == 0) {
             throw new EmailNotFoundException(email);
         }
 
