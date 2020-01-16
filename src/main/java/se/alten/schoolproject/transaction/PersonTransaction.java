@@ -5,8 +5,8 @@ import se.alten.schoolproject.exceptions.DuplicateEmailException;
 import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
 
-import javax.ejb.Stateless;
-import javax.enterprise.inject.Default;
+//import javax.ejb.Stateless;
+//import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,9 +14,9 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import java.util.List;
 
-@Stateless
-@Default
-public class PersonTransaction implements PersonTransactionAccess {
+/*@Stateless
+@Default*/
+public abstract class PersonTransaction implements PersonTransactionAccess {
 
     @PersistenceContext(unitName = "school")
     private EntityManager entityManager;
