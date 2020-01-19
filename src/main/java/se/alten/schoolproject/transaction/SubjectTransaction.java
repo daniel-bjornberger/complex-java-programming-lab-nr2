@@ -4,7 +4,7 @@ import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
-import se.alten.schoolproject.exceptions.EmailNotFoundException;
+import se.alten.schoolproject.exceptions.PersonNotRegisteredToSubjectException;
 import se.alten.schoolproject.exceptions.TitleNotFoundException;
 
 import javax.ejb.Stateless;
@@ -41,18 +41,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         }
 
     }
-
-
-    /*@Override
-    public List<Subject> getSubjectByName(List<String> subject) {
-
-        String queryStr = "SELECT sub FROM Subject sub WHERE sub.title IN :subject";
-        TypedQuery<Subject> query = entityManager.createQuery(queryStr, Subject.class);
-        query.setParameter("subject", subject);
-
-        return query.getResultList();
-
-     }*/
+    
 
     public void deleteSubject(String title) throws TitleNotFoundException {
 
@@ -114,6 +103,57 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         }
         catch (NoResultException e) {
             throw new TitleNotFoundException(title);
+        }
+
+    }
+
+
+    public void removeStudentFromSubject(String title, Student student) throws TitleNotFoundException, PersonNotRegisteredToSubjectException {
+
+        Subject subject;
+
+        try {
+            subject = findSubjectByTitle(title);
+        }
+        catch (NoResultException e) {
+            throw new TitleNotFoundException(title);
+        }
+
+        if (subject.getStudents().contains(student)) {
+
+            subject.getStudents().remove(student);
+            entityManager.merge(subject);
+
+        }
+        else {
+            throw new PersonNotRegisteredToSubjectException("The student " + student.getFirstName() +
+                    " " + student.getLastName() + " is not registered to the subject " +  title + ".");
+        }
+
+    }
+
+
+    @Override
+    public void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException {
+
+        Subject subject;
+
+        try {
+            subject = findSubjectByTitle(title);
+        }
+        catch (NoResultException e) {
+            throw new TitleNotFoundException(title);
+        }
+
+        if (subject.getTeacher() != null) {
+
+            subject.setTeacher(null);
+            entityManager.merge(subject);
+
+        }
+        else {
+            throw new PersonNotRegisteredToSubjectException("The subject " + title +
+                    "does not have a teacher that can be removed.");
         }
 
     }

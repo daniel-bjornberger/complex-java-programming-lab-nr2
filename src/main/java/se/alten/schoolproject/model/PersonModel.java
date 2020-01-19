@@ -3,8 +3,10 @@ package se.alten.schoolproject.model;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;
-import se.alten.schoolproject.entity.Person;
+//import se.alten.schoolproject.entity.Person;
+import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.MissingPersonValueException;
 
 import java.util.ArrayList;
@@ -24,17 +26,28 @@ public class PersonModel {
     private List<String> subjects = new ArrayList<>();
 
 
-    public PersonModel(Person person) {
+    public PersonModel(Student student) {
 
-        this.firstname = person.getFirstName();
-        this.lastname  = person.getLastName();
-        this.email     = person.getEmail();
+        this.firstname = student.getFirstName();
+        this.lastname  = student.getLastName();
+        this.email     = student.getEmail();
 
-        for (Object subject: person.getSubjects()) {
+        for (Object subject: student.getSubjects()) {
             this.subjects.add(((Subject) subject).getTitle());
         }
 
-        //this.subjects  = person.getSubjects();
+    }
+
+
+    public PersonModel(Teacher teacher) {
+
+        this.firstname = teacher.getFirstName();
+        this.lastname  = teacher.getLastName();
+        this.email     = teacher.getEmail();
+
+        for (Object subject: teacher.getSubjects()) {
+            this.subjects.add(((Subject) subject).getTitle());
+        }
 
     }
 
@@ -50,7 +63,6 @@ public class PersonModel {
         this.firstname = temp.getFirstname();
         this.lastname  = temp.getLastname();
         this.email     = temp.getEmail();
-        //this.subjects  = temp.getSubjects();
 
     }
 
@@ -84,6 +96,3 @@ public class PersonModel {
     }*/
 
 }
-
-
-// Bytt namn, från StudentModel till PersonModel

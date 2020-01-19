@@ -1,4 +1,26 @@
 package se.alten.schoolproject.transaction;
 
-public interface StudentTransactionAccess extends PersonTransactionAccess {
+import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.exceptions.DuplicateEmailException;
+import se.alten.schoolproject.exceptions.EmailNotFoundException;
+import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
+
+import java.util.List;
+
+public interface StudentTransactionAccess {
+
+    List listAllStudents();
+
+    void addStudent(Student student) throws DuplicateEmailException;
+
+    void deleteStudent(String email) throws EmailNotFoundException;
+
+    void updateStudent(Student student) throws EmailNotFoundException;
+
+    void updateStudentFirstName(Student student) throws LastNameAndEmailNotFoundException;
+
+    List findStudentsByLastName(String lastName);
+
+    Student findStudentByEmail(String email) throws EmailNotFoundException;
+
 }

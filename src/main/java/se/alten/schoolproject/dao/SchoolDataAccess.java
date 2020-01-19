@@ -1,14 +1,12 @@
 package se.alten.schoolproject.dao;
 
 import com.google.gson.JsonObject;
-import se.alten.schoolproject.entity.Person;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.*;
 import se.alten.schoolproject.model.PersonModel;
 import se.alten.schoolproject.model.SubjectModel;
-import se.alten.schoolproject.transaction.PersonTransactionAccess;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import se.alten.schoolproject.transaction.SubjectTransactionAccess;
 import se.alten.schoolproject.transaction.TeacherTransactionAccess;
@@ -21,11 +19,6 @@ import java.util.List;
 
 @Stateless
 public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
-
-    /*private Student student = new Student();
-    private PersonModel studentModel = new PersonModel();
-    private Subject subject = new Subject();
-    private SubjectModel subjectModel = new SubjectModel();*/
 
     @Inject
     StudentTransactionAccess studentTransactionAccess;
@@ -40,7 +33,32 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List listAllStudents() {
 
-        return listAllPersons(studentTransactionAccess);
+        //return listAllPersons(studentTransactionAccess);
+
+        PersonModel personModel;
+
+        Student tempStudent;
+
+        List<PersonModel> personModelList = new ArrayList<>();
+
+        List studentList = studentTransactionAccess.listAllStudents();
+
+
+        for (Object student: studentList) {
+
+            List<String> tempSubjects = new ArrayList<>();
+            tempStudent = (Student) student;
+
+            personModel = new PersonModel(tempStudent);
+
+            tempStudent.getSubjects().forEach(subject -> tempSubjects.add(subject.getTitle()));
+
+            personModel.setSubjects(tempSubjects);
+            personModelList.add(personModel);
+
+        }
+
+        return personModelList;
 
     }
 
@@ -48,12 +66,37 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List listAllTeachers() {
 
-        return listAllPersons(teacherTransactionAccess);
+        //return listAllPersons(teacherTransactionAccess);
+
+        PersonModel personModel;
+
+        Teacher tempteacher;
+
+        List<PersonModel> personModelList = new ArrayList<>();
+
+        List teacherList = teacherTransactionAccess.listAllTeachers();
+
+
+        for (Object teacher: teacherList) {
+
+            List<String> tempSubjects = new ArrayList<>();
+            tempteacher = (Teacher) teacher;
+
+            personModel = new PersonModel(tempteacher);
+
+            tempteacher.getSubjects().forEach(subject -> tempSubjects.add(subject.getTitle()));
+
+            personModel.setSubjects(tempSubjects);
+            personModelList.add(personModel);
+
+        }
+
+        return personModelList;
 
     }
 
 
-    private List listAllPersons(PersonTransactionAccess personTransactionAccess) {
+    /*private List listAllPersons(PersonTransactionAccess personTransactionAccess) {
 
         PersonModel personModel;
 
@@ -79,7 +122,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         }
 
 
-        /*if (personType == STUDENT) {
+        *//*if (personType == STUDENT) {
 
             personList = studentTransactionAccess.listAllPersons();
 
@@ -120,11 +163,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
             }
 
-        }*/
+        }*//*
 
         return personModelList;
 
-    }
+    }*/
 
 
 /*    private List generateTeacherModelList() {
@@ -143,7 +186,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         return personModel;*/
 
-        studentTransactionAccess.addPerson(new Student(personModel));
+        studentTransactionAccess.addStudent(new Student(personModel));
 
         return personModel;
 
@@ -159,7 +202,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         return personModel;*/
 
-        teacherTransactionAccess.addPerson(new Teacher(personModel));
+        teacherTransactionAccess.addTeacher(new Teacher(personModel));
 
         return personModel;
 
@@ -189,7 +232,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void deleteStudent(String email) throws EmailNotFoundException {
 
-        studentTransactionAccess.deletePerson(email);
+        studentTransactionAccess.deleteStudent(email);
 
     }
 
@@ -197,7 +240,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void deleteTeacher(String email) throws EmailNotFoundException {
 
-        teacherTransactionAccess.deletePerson(email);
+        teacherTransactionAccess.deleteTeacher(email);
 
     }
 
@@ -221,7 +264,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         PersonModel personModel = generatePersonModel(firstName, lastName, email);
 
-        studentTransactionAccess.updatePerson(new Student(personModel));
+        studentTransactionAccess.updateStudent(new Student(personModel));
 
         return personModel;
 
@@ -235,7 +278,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         PersonModel personModel = generatePersonModel(firstName, lastName, email);
 
-        teacherTransactionAccess.updatePerson(new Teacher(personModel));
+        teacherTransactionAccess.updateTeacher(new Teacher(personModel));
 
         return personModel;
 
@@ -284,7 +327,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         PersonModel personModel = new PersonModel(studentJsonString);
 
-        studentTransactionAccess.updateFirstName(new Student(personModel));
+        studentTransactionAccess.updateStudentFirstName(new Student(personModel));
 
         return personModel;
 
@@ -298,7 +341,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         PersonModel personModel = new PersonModel(teacherJsonString);
 
-        teacherTransactionAccess.updateFirstName(new Teacher(personModel));
+        teacherTransactionAccess.updateTeacherFirstName(new Teacher(personModel));
 
         return personModel;
 
@@ -327,16 +370,14 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List findStudentsByLastName(String lastName) {
 
-        /*List studentList = studentTransactionAccess.findStudentsByLastName(lastName);
+        List studentList = studentTransactionAccess.findStudentsByLastName(lastName);
         List<PersonModel> personModelList = new ArrayList<>();
 
         for (Object student: studentList) {
-            personModelList.add(new PersonModel((Person) student));
+            personModelList.add(new PersonModel((Student) student));
         }
 
-        return personModelList;*/
-
-        return findPersonsByLastName(lastName, studentTransactionAccess);
+        return personModelList;
 
     }
 
@@ -344,21 +385,19 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List findTeachersByLastName(String lastName) {
 
-        /*List teacherList = teacherTransactionAccess.findTeachersByLastName(lastName);
+        List teacherList = teacherTransactionAccess.findTeachersByLastName(lastName);
         List<PersonModel> personModelList = new ArrayList<>();
 
-        for (Object student: teacherList) {
-            personModelList.add(new PersonModel((Student) student));
+        for (Object teacher: teacherList) {
+            personModelList.add(new PersonModel((Teacher) teacher));
         }
 
-        return personModelList;*/
-
-        return findPersonsByLastName(lastName, teacherTransactionAccess);
+        return personModelList;
 
     }
 
 
-    private List findPersonsByLastName(String lastName, PersonTransactionAccess personTransactionAccess) {
+    /*private List findPersonsByLastName(String lastName, PersonTransactionAccess personTransactionAccess) {
 
         List personList = personTransactionAccess.findPersonsByLastName(lastName);
         List<PersonModel> personModelList = new ArrayList<>();
@@ -369,7 +408,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         return personModelList;
 
-    }
+    }*/
 
 
     @Override
@@ -422,7 +461,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException {
 
-        Student student = (Student) studentTransactionAccess.findPersonByEmail(studentEmail);
+        Student student = studentTransactionAccess.findStudentByEmail(studentEmail);
 
         //Subject subject = subjectTransactionAccess.findSubjectByTitle(title);
 
@@ -434,7 +473,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public SubjectModel addTeacherToSubject(String teacherEmail, String title) throws EmailNotFoundException, TitleNotFoundException {
 
-        Teacher teacher = (Teacher) teacherTransactionAccess.findPersonByEmail(teacherEmail);
+        Teacher teacher = teacherTransactionAccess.findTeacherByEmail(teacherEmail);
 
         return new SubjectModel(subjectTransactionAccess.addTeacherToSubject(title, teacher));
 
@@ -444,7 +483,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void removeStudentFromSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonNotRegisteredToSubjectException {
 
-        Student student = (Student) studentTransactionAccess.findPersonByEmail(studentEmail);
+        Student student = studentTransactionAccess.findStudentByEmail(studentEmail);
 
         subjectTransactionAccess.removeStudentFromSubject(title, student);
 
@@ -454,14 +493,9 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException {
 
-        //Teacher teacher = (Teacher) teacherTransactionAccess.findPersonByEmail(teacherEmail);
-
         subjectTransactionAccess.removeTeacherFromSubject(title);
 
     }
 
 }
 
-
-// Bytte StudentModel till PersonModel. Lade till listAllTeachers,
-// samt (private) listAllPersons.

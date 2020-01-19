@@ -1,11 +1,10 @@
 package se.alten.schoolproject.transaction;
 
-import se.alten.schoolproject.entity.Person;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
-import se.alten.schoolproject.exceptions.EmailNotFoundException;
+import se.alten.schoolproject.exceptions.PersonNotRegisteredToSubjectException;
 import se.alten.schoolproject.exceptions.TitleNotFoundException;
 
 import javax.ejb.Local;
@@ -18,8 +17,6 @@ public interface SubjectTransactionAccess {
 
     void addSubject(Subject subject) throws DuplicateTitleException;
 
-    //List<Subject> getSubjectByName(List<String> subject);
-
     void deleteSubject(String title) throws TitleNotFoundException;
 
     Subject findSubjectByTitle(String title) throws TitleNotFoundException;
@@ -27,5 +24,9 @@ public interface SubjectTransactionAccess {
     Subject addStudentToSubject(String title, Student student) throws TitleNotFoundException;
 
     Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException;
+
+    void removeStudentFromSubject(String title, Student student) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
+
+    void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
 
 }
