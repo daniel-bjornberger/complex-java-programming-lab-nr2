@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class Teacher extends Person implements Serializable {
+public class Teacher implements Serializable {
 
     private static final long serialVersionUID = 4696957121253963185L;
 
@@ -37,12 +37,6 @@ public class Teacher extends Person implements Serializable {
     private Set<Subject> subjects = new HashSet<>();
 
 
-    /*public Teacher(PersonModel personModel) {
-
-        super(personModel);
-
-    }*/
-
     public Teacher(PersonModel personModel) {
 
         this.firstName = personModel.getFirstname();
@@ -50,8 +44,5 @@ public class Teacher extends Person implements Serializable {
         this.email     = personModel.getEmail();
 
     }
-
-
-
 
 }

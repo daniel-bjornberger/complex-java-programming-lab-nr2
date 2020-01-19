@@ -12,18 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-//@AllArgsConstructor
 @ToString
 public class SubjectModel {
 
-    //private Long id;
     private String title;
-
-    /*public SubjectModel toModel(Subject subjectToAdd) {
-        SubjectModel subjectModel = new SubjectModel();
-        subjectModel.setTitle(subjectToAdd.getTitle());
-        return subjectModel;
-    }*/
 
     private List<PersonModel> students = new ArrayList<>();
 
@@ -57,9 +49,5 @@ public class SubjectModel {
         return string == null || string.isBlank();
 
     }
-
-
-
-
 
 }

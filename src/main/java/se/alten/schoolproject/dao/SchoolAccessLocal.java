@@ -1,11 +1,11 @@
 package se.alten.schoolproject.dao;
 
-        import se.alten.schoolproject.exceptions.*;
-        import se.alten.schoolproject.model.PersonModel;
-        import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.exceptions.*;
+import se.alten.schoolproject.model.PersonModel;
+import se.alten.schoolproject.model.SubjectModel;
 
-        import javax.ejb.Local;
-        import java.util.List;
+import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface SchoolAccessLocal {
@@ -51,5 +51,3 @@ public interface SchoolAccessLocal {
     void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
 
 }
-
-// Bytte StudentModel till PersonModel. Lade till listAllTeachers.

@@ -145,6 +145,3 @@ public class StudentController {
     }
 
 }
-
-
-// Bytte StudentModel till PersonModel.

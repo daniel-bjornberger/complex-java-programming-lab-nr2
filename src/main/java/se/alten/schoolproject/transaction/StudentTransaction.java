@@ -60,8 +60,6 @@ public class StudentTransaction implements StudentTransactionAccess {
 
         Query updateQuery = entityManager.createNativeQuery("UPDATE student SET firstname = :firstname, lastname = :lastname WHERE email = :email", Student.class);
 
-        //System.out.println("UPDATE " + this.personType + " p SET p.firstname = :firstname, p.lastname = :lastname WHERE p.email = :email");
-
         int numberOfStudentsUpdated = updateQuery.setParameter("firstname", student.getFirstName())
                 .setParameter("lastname", student.getLastName())
                 .setParameter("email", student.getEmail())

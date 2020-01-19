@@ -3,7 +3,6 @@ package se.alten.schoolproject.rest;
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
 import se.alten.schoolproject.exceptions.*;
-import se.alten.schoolproject.model.PersonModel;
 import se.alten.schoolproject.model.SubjectModel;
 
 import javax.ejb.Stateless;
@@ -43,14 +42,6 @@ public class SubjectController {
     @Produces({"application/JSON"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addSubject(String subjectJsonString) {
-
-        /*try {
-            SubjectModel subjectModel = sal.addSubject(subject);
-            return Response.ok(subjectModel).build();
-        }
-        catch (Exception e) {
-            return Response.status(404).build();
-        }*/
 
         try {
             SubjectModel subjectModel = schoolAccessLocal.addSubject(subjectJsonString);
@@ -97,7 +88,6 @@ public class SubjectController {
     public Response findSubjectByTitle(@PathParam("title") String title) {
 
         try {
-            //List studentModelList = schoolAccessLocal.findStudentsByLastName(lastName);
             SubjectModel subjectModel = schoolAccessLocal.findSubjectByTitle(title);
             return Response.ok(subjectModel).build();
         }
@@ -120,11 +110,7 @@ public class SubjectController {
             SubjectModel subjectModel = schoolAccessLocal.addStudentToSubject(studentEmail, title);
             return Response.ok(subjectModel).build();
         }
-        catch (EmailNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
-                    .entity(e.getMessage()).build();
-        }
-        catch (TitleNotFoundException e) {
+        catch (EmailNotFoundException | TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -143,11 +129,7 @@ public class SubjectController {
             SubjectModel subjectModel = schoolAccessLocal.addTeacherToSubject(teacherEmail, title);
             return Response.ok(subjectModel).build();
         }
-        catch (EmailNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
-                    .entity(e.getMessage()).build();
-        }
-        catch (TitleNotFoundException e) {
+        catch (EmailNotFoundException | TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -167,15 +149,10 @@ public class SubjectController {
             return Response.ok().type(MediaType.TEXT_PLAIN)
                     .entity("The student was removed from the subject " + title + ".").build();
         }
-        catch (EmailNotFoundException e) {
+        catch (EmailNotFoundException | TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        }
-        catch (TitleNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
-                    .entity(e.getMessage()).build();
-        }
-        catch (PersonNotRegisteredToSubjectException e) {
+        } catch (PersonNotRegisteredToSubjectException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -207,5 +184,3 @@ public class SubjectController {
 
 }
 
-
-// Lade till deleteSubject.

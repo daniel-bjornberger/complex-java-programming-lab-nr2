@@ -33,8 +33,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List listAllStudents() {
 
-        //return listAllPersons(studentTransactionAccess);
-
         PersonModel personModel;
 
         Student tempStudent;
@@ -66,11 +64,9 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List listAllTeachers() {
 
-        //return listAllPersons(teacherTransactionAccess);
-
         PersonModel personModel;
 
-        Teacher tempteacher;
+        Teacher tempTeacher;
 
         List<PersonModel> personModelList = new ArrayList<>();
 
@@ -80,11 +76,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         for (Object teacher: teacherList) {
 
             List<String> tempSubjects = new ArrayList<>();
-            tempteacher = (Teacher) teacher;
+            tempTeacher = (Teacher) teacher;
 
-            personModel = new PersonModel(tempteacher);
+            personModel = new PersonModel(tempTeacher);
 
-            tempteacher.getSubjects().forEach(subject -> tempSubjects.add(subject.getTitle()));
+            tempTeacher.getSubjects().forEach(subject -> tempSubjects.add(subject.getTitle()));
 
             personModel.setSubjects(tempSubjects);
             personModelList.add(personModel);
@@ -96,95 +92,10 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
 
-    /*private List listAllPersons(PersonTransactionAccess personTransactionAccess) {
-
-        PersonModel personModel;
-
-        Person tempPerson;
-
-        List<PersonModel> personModelList = new ArrayList<>();
-
-        List personList = personTransactionAccess.listAllPersons();
-
-
-        for (Object person: personList) {
-
-            List<String> tempSubjects = new ArrayList<>();
-            tempPerson = (Person) person;
-
-            personModel = new PersonModel(tempPerson);
-
-            tempPerson.getSubjects().forEach(subject -> tempSubjects.add(subject.getTitle()));
-
-            personModel.setSubjects(tempSubjects);
-            personModelList.add(personModel);
-
-        }
-
-
-        *//*if (personType == STUDENT) {
-
-            personList = studentTransactionAccess.listAllPersons();
-
-            Student tempStudent;
-
-            for (Object person: personList) {
-
-                List<String> tempSubjects = new ArrayList<>();
-                tempStudent = (Student) person;
-
-                personModel = new PersonModel(tempStudent);
-
-                tempStudent.getSubjects().forEach(subject -> tempSubjects.add(subject.getTitle()));
-
-                personModel.setSubjects(tempSubjects);
-                personModelList.add(personModel);
-
-            }
-
-        }
-        else {
-
-            personList = teacherTransactionAccess.listAllPersons();
-
-            Teacher tempTeacher;
-
-            for (Object person: personList) {
-
-                List<String> tempSubjects = new ArrayList<>();
-                tempTeacher = (Teacher) person;
-
-                personModel = new PersonModel(tempTeacher);
-
-                tempTeacher.getSubjects().forEach(subject -> tempSubjects.add(subject.getTitle()));
-
-                personModel.setSubjects(tempSubjects);
-                personModelList.add(personModel);
-
-            }
-
-        }*//*
-
-        return personModelList;
-
-    }*/
-
-
-/*    private List generateTeacherModelList() {
-
-
-
-    }*/
-
-
     @Override
     public PersonModel addStudent(String studentJsonString) throws MissingPersonValueException, DuplicateEmailException {
 
         PersonModel personModel = new PersonModel(studentJsonString);
-
-        /*studentTransactionAccess.addPerson(new Person(personModel));
-
-        return personModel;*/
 
         studentTransactionAccess.addStudent(new Student(personModel));
 
@@ -198,35 +109,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         PersonModel personModel = new PersonModel(teacherJsonString);
 
-        /*teacherTransactionAccess.addPerson(new Person(personModel));
-
-        return personModel;*/
-
         teacherTransactionAccess.addTeacher(new Teacher(personModel));
 
         return personModel;
 
     }
-
-
-    /*private void addPerson(Person person,
-                                  PersonTransactionAccess personTransactionAccess) throws MissingPersonValueException, DuplicateEmailException {
-
-        //PersonModel personModel = new PersonModel(personJsonString);
-
-*//*        if (personType == STUDENT) {
-            studentTransactionAccess.addPerson(new Student(personModel));
-        }
-        else {
-            teacherTransactionAccess.addPerson(new Teacher(personModel));
-        }*//*
-
-        personTransactionAccess.addPerson(new Person() {
-        });
-
-        //return personModel;
-
-    }*/
 
 
     @Override
@@ -248,20 +135,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public PersonModel updateStudent(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException {
 
-        /*JsonObject studentJson = new JsonObject();
-
-        studentJson.addProperty("firstname", firstName);
-        studentJson.addProperty("lastname", lastName);
-        studentJson.addProperty("email", email);
-
-        PersonModel personModel = new PersonModel(studentJson.toString());
-
-        studentTransactionAccess.updateStudent(new Student(personModel));
-
-        return personModel;
-
-        return updatePerson(firstName, lastName, email, STUDENT);*/
-
         PersonModel personModel = generatePersonModel(firstName, lastName, email);
 
         studentTransactionAccess.updateStudent(new Student(personModel));
@@ -273,8 +146,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public PersonModel updateTeacher(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException {
-
-        //return updatePerson(firstName, lastName, email, TEACHER);
 
         PersonModel personModel = generatePersonModel(firstName, lastName, email);
 
@@ -298,30 +169,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
 
-    /*private PersonModel updatePerson(String firstName,
-                                     String lastName, String email,
-                                     Person.PersonType personType) throws MissingPersonValueException, EmailNotFoundException {
-
-        JsonObject personJson = new JsonObject();
-
-        personJson.addProperty("firstname", firstName);
-        personJson.addProperty("lastname", lastName);
-        personJson.addProperty("email", email);
-
-        PersonModel personModel = new PersonModel(personJson.toString());
-
-        if (personType == STUDENT) {
-            studentTransactionAccess.updatePerson(new Student(personModel));
-        }
-        else {
-            teacherTransactionAccess.updatePerson(new Teacher(personModel));
-        }
-
-        return personModel;
-
-    }*/
-
-
     @Override
     public PersonModel updateStudentFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException {
 
@@ -330,8 +177,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         studentTransactionAccess.updateStudentFirstName(new Student(personModel));
 
         return personModel;
-
-        //return updateFirstName(studentJsonString, STUDENT);
 
     }
 
@@ -345,26 +190,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         return personModel;
 
-        //return updateFirstName(teacherJsonString, TEACHER);
-
     }
-
-
-    /*private PersonModel updateFirstName(String personJsonString,
-                                        Person.PersonType personType) throws MissingPersonValueException, LastNameAndEmailNotFoundException {
-
-        PersonModel personModel = new PersonModel(personJsonString);
-
-        if (personType == STUDENT) {
-            studentTransactionAccess.updateFirstName(new Student(personModel));
-        }
-        else {
-            teacherTransactionAccess.updateFirstName(new Teacher(personModel));
-        }
-
-        return personModel;
-
-    }*/
 
 
     @Override
@@ -397,24 +223,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
 
-    /*private List findPersonsByLastName(String lastName, PersonTransactionAccess personTransactionAccess) {
-
-        List personList = personTransactionAccess.findPersonsByLastName(lastName);
-        List<PersonModel> personModelList = new ArrayList<>();
-
-        for (Object person: personList) {
-            personModelList.add(new PersonModel((Person) person));
-        }
-
-        return personModelList;
-
-    }*/
-
-
     @Override
     public List listAllSubjects() {
-
-        //return subjectTransactionAccess.listAllSubjects();
 
         List subjectList = subjectTransactionAccess.listAllSubjects();
         List<SubjectModel> subjectModelList = new ArrayList<>();
@@ -430,10 +240,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public SubjectModel addSubject(String subjectJsonString) throws DuplicateTitleException, MissingTitleValueException {
-
-        /*Subject subjectToAdd = subject.toEntity(newSubject);
-        subjectTransactionAccess.addSubject(subjectToAdd);
-        return subjectModel.toModel(subjectToAdd);*/
 
         SubjectModel subjectModel = new SubjectModel(subjectJsonString);
 
@@ -462,8 +268,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     public SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException {
 
         Student student = studentTransactionAccess.findStudentByEmail(studentEmail);
-
-        //Subject subject = subjectTransactionAccess.findSubjectByTitle(title);
 
         return new SubjectModel(subjectTransactionAccess.addStudentToSubject(title, student));
 

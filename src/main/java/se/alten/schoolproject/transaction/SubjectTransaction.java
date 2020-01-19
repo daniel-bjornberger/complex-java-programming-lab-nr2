@@ -16,7 +16,7 @@ import java.util.List;
 @Default
 public class SubjectTransaction implements SubjectTransactionAccess{
 
-    @PersistenceContext(unitName="school")
+    @PersistenceContext(unitName = "school")
     private EntityManager entityManager;
 
 
@@ -41,7 +41,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         }
 
     }
-    
+
 
     public void deleteSubject(String title) throws TitleNotFoundException {
 

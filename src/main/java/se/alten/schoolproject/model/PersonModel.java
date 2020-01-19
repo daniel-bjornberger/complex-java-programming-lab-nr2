@@ -3,7 +3,6 @@ package se.alten.schoolproject.model;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;
-//import se.alten.schoolproject.entity.Person;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.entity.Teacher;
@@ -22,7 +21,6 @@ public class PersonModel {
     private String firstname;
     private String lastname;
     private String email;
-    //private Set<String> subjects = new HashSet<>();
     private List<String> subjects = new ArrayList<>();
 
 
@@ -72,27 +70,5 @@ public class PersonModel {
         return string == null || string.isBlank();
 
     }
-
-
-    /*public List<PersonModel> toModelList(List<Student> students) {
-
-        List<PersonModel> studentModels = new ArrayList<>();
-
-        students.forEach(student -> {
-            PersonModel sm = new PersonModel();
-            sm.firstname = student.getFirstName();
-            sm.lastname = student.getLastName();
-            sm.email = student.getEmail();
-            student.getSubject().forEach(subject -> {
-                sm.subjects.add(subject.getTitle());
-            });
-
-            studentModels.add(sm);
-
-        });
-
-        return studentModels;
-
-    }*/
 
 }

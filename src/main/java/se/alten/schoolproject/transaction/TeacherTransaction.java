@@ -60,8 +60,6 @@ public class TeacherTransaction implements TeacherTransactionAccess {
 
         Query updateQuery = entityManager.createNativeQuery("UPDATE teacher SET firstname = :firstname, lastname = :lastname WHERE email = :email", Teacher.class);
 
-        //System.out.println("UPDATE " + this.personType + " p SET p.firstname = :firstname, p.lastname = :lastname WHERE p.email = :email");
-
         int numberOfTeachersUpdated = updateQuery.setParameter("firstname", teacher.getFirstName())
                 .setParameter("lastname", teacher.getLastName())
                 .setParameter("email", teacher.getEmail())

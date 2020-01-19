@@ -37,12 +37,6 @@ public class Student implements Serializable {
     private Set<Subject> subjects = new HashSet<>();
 
 
-    /*public Student(PersonModel personModel) {
-
-        super(personModel);
-
-    }*/
-
     public Student(PersonModel personModel) {
 
         this.firstName = personModel.getFirstname();
@@ -50,11 +44,5 @@ public class Student implements Serializable {
         this.email     = personModel.getEmail();
 
     }
-
-
-/*    @Override
-    public void setSubjects(Set<Subject> subjects) {
-
-    }*/
 
 }
