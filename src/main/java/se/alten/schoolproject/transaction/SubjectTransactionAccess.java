@@ -18,4 +18,6 @@ public interface SubjectTransactionAccess {
 
     void deleteSubject(String title) throws TitleNotFoundException;
 
+    Subject findSubjectByTitle(String title) throws TitleNotFoundException;
+
 }

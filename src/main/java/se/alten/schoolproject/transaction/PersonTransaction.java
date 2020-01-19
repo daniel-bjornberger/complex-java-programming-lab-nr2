@@ -45,7 +45,8 @@ public abstract class PersonTransaction implements PersonTransactionAccess {
         try {
             entityManager.persist(person);  // Kommer detta att fungera? Dela upp i student & teacher?
             entityManager.flush();
-        } catch (PersistenceException pe) {
+        }
+        catch (PersistenceException pe) {
             throw new DuplicateEmailException(person.getEmail());
         }
 
@@ -98,7 +99,8 @@ public abstract class PersonTransaction implements PersonTransactionAccess {
                     .setParameter("lastname", person.getLastName())
                     .setParameter("email", person.getEmail())
                     .getSingleResult();
-        } catch (PersistenceException pe) {
+        }
+        catch (PersistenceException pe) {
             throw new LastNameAndEmailNotFoundException(person.getLastName(), person.getEmail());
         }
 

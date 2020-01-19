@@ -84,6 +84,24 @@ public class SubjectController {
 
     }
 
+
+    @GET
+    @Path("findsubjectbytitle/{title}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"application/JSON"})
+    public Response findSubjectByTitle(@PathParam("title") String title) {
+
+        try {
+            //List studentModelList = schoolAccessLocal.findStudentsByLastName(lastName);
+            SubjectModel subjectModel = schoolAccessLocal.findSubjectByTitle(title);
+            return Response.ok(subjectModel).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
+    }
+
 }
 
 

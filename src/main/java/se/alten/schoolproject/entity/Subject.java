@@ -27,7 +27,7 @@ public class Subject implements Serializable {
     @Column(name = "title", unique = true)
     private String title;
 
-    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "subject_student",
             joinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "stud_id", referencedColumnName = "id"))
@@ -56,9 +56,9 @@ public class Subject implements Serializable {
         return subject;
     }*/
 
-    public Subject(String titleString) {
+    /*public Subject(String titleString) {
         this.title = titleString;
-    }
+    }*/
 
 
     public Subject(SubjectModel subjectModel) {

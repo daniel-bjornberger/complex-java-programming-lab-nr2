@@ -40,6 +40,8 @@ public interface SchoolAccessLocal {
 
     void deleteSubject(String title) throws TitleNotFoundException;
 
+    SubjectModel findSubjectByTitle(String title) throws TitleNotFoundException;
+
 }
 
 // Bytte StudentModel till PersonModel. Lade till listAllTeachers.

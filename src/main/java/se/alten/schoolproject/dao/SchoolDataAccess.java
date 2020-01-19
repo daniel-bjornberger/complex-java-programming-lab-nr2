@@ -411,6 +411,15 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     }
 
+    @Override
+    public SubjectModel findSubjectByTitle(String title) throws TitleNotFoundException {
+
+        Subject subject = subjectTransactionAccess.findSubjectByTitle(title);
+
+        return new SubjectModel(subject);
+
+    }
+
 }
 
 

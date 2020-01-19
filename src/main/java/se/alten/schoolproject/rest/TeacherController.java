@@ -100,10 +100,10 @@ public class TeacherController {
 
 
     @PATCH
-    @Path("updatefirstname")
+    @Path("updateteacherfirstname")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({"application/JSON"})
-    public Response updateFirstName(String teacherJsonString) {
+    public Response updateTeacherFirstName(String teacherJsonString) {
 
         try {
             PersonModel personModel = schoolAccessLocal.updateTeacherFirstName(teacherJsonString);

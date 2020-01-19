@@ -6,6 +6,9 @@ import lombok.*;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.MissingTitleValueException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,9 +25,17 @@ public class SubjectModel {
         return subjectModel;
     }*/
 
+    private List<PersonModel> students = new ArrayList<>();
+
+    private PersonModel teacher;
+
 
     public SubjectModel(Subject subject) {
         this.title = subject.getTitle();
+
+        subject.getStudents().forEach(student -> this.students.add(new PersonModel(student)));
+
+        this.teacher = new PersonModel(subject.getTeacher());
     }
 
 

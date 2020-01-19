@@ -33,7 +33,8 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         try {
             entityManager.persist(subject);
             entityManager.flush();
-        } catch (PersistenceException pe) {
+        }
+        catch (PersistenceException pe) {
             throw new DuplicateTitleException(subject.getTitle());
         }
 
@@ -61,6 +62,21 @@ public class SubjectTransaction implements SubjectTransactionAccess{
             throw new TitleNotFoundException(title);
         }
 
+    }
+
+
+    @Override
+    public Subject findSubjectByTitle(String title) throws TitleNotFoundException {
+
+        try {
+            return (Subject) entityManager
+                    .createQuery("SELECT s FROM Subject s WHERE s.title = :title")
+                    .setParameter("title", title)
+                    .getSingleResult();
+        }
+        catch (NoResultException nre) {
+            throw new TitleNotFoundException(title);
+        }
     }
 
 }
