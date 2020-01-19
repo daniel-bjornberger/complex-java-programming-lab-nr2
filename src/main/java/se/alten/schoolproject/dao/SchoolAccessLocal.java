@@ -42,6 +42,8 @@ public interface SchoolAccessLocal {
 
     SubjectModel findSubjectByTitle(String title) throws TitleNotFoundException;
 
+    SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException;
+
 }
 
 // Bytte StudentModel till PersonModel. Lade till listAllTeachers.

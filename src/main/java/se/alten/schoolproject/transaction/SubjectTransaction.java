@@ -34,7 +34,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
             entityManager.persist(subject);
             entityManager.flush();
         }
-        catch (PersistenceException pe) {
+        catch (PersistenceException e) {
             throw new DuplicateTitleException(subject.getTitle());
         }
 
@@ -74,7 +74,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
                     .setParameter("title", title)
                     .getSingleResult();
         }
-        catch (NoResultException nre) {
+        catch (NoResultException e) {
             throw new TitleNotFoundException(title);
         }
     }

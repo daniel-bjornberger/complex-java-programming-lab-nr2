@@ -32,7 +32,8 @@ public class StudentController {
         try {
             List studentModelList = schoolAccessLocal.listAllStudents();
             return Response.ok(studentModelList).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return Response.status(Response.Status.CONFLICT).build();
         }
 
@@ -48,13 +49,16 @@ public class StudentController {
         try {
             PersonModel personModel = schoolAccessLocal.addStudent(studentJsonString);
             return Response.ok(personModel).build();
-        } catch (MissingPersonValueException e) {
+        }
+        catch (MissingPersonValueException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (DuplicateEmailException e) {
+        }
+        catch (DuplicateEmailException e) {
             return Response.status(Response.Status.CONFLICT).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -71,7 +75,8 @@ public class StudentController {
             schoolAccessLocal.deleteStudent(email);
             return Response.ok().type(MediaType.TEXT_PLAIN)
                     .entity("The student was deleted from the database.").build();
-        } catch (EmailNotFoundException e) {
+        }
+        catch (EmailNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -88,10 +93,12 @@ public class StudentController {
         try {
             PersonModel personModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
             return Response.ok(personModel).build();
-        } catch (MissingPersonValueException e) {
+        }
+        catch (MissingPersonValueException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (EmailNotFoundException e) {
+        }
+        catch (EmailNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -108,10 +115,12 @@ public class StudentController {
         try {
             PersonModel personModel = schoolAccessLocal.updateStudentFirstName(studentJsonString);
             return Response.ok(personModel).build();
-        } catch (MissingPersonValueException e) {
+        }
+        catch (MissingPersonValueException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (LastNameAndEmailNotFoundException e) {
+        }
+        catch (LastNameAndEmailNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -128,7 +137,8 @@ public class StudentController {
         try {
             List studentModelList = schoolAccessLocal.findStudentsByLastName(lastName);
             return Response.ok(studentModelList).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return Response.status(Response.Status.CONFLICT).build();
         }
 

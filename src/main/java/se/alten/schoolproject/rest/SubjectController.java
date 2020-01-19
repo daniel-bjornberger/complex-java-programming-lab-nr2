@@ -2,9 +2,8 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
-import se.alten.schoolproject.exceptions.DuplicateTitleException;
-import se.alten.schoolproject.exceptions.MissingTitleValueException;
-import se.alten.schoolproject.exceptions.TitleNotFoundException;
+import se.alten.schoolproject.exceptions.*;
+import se.alten.schoolproject.model.PersonModel;
 import se.alten.schoolproject.model.SubjectModel;
 
 import javax.ejb.Stateless;
@@ -31,7 +30,8 @@ public class SubjectController {
         try {
             List subjectModelList = schoolAccessLocal.listAllSubjects();
             return Response.ok(subjectModelList).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return Response.status(Response.Status.CONFLICT).build();
         }
 
@@ -47,20 +47,24 @@ public class SubjectController {
         /*try {
             SubjectModel subjectModel = sal.addSubject(subject);
             return Response.ok(subjectModel).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return Response.status(404).build();
         }*/
 
         try {
             SubjectModel subjectModel = schoolAccessLocal.addSubject(subjectJsonString);
             return Response.ok(subjectModel).build();
-        } catch (MissingTitleValueException e) {
+        }
+        catch (MissingTitleValueException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (DuplicateTitleException e) {
+        }
+        catch (DuplicateTitleException e) {
             return Response.status(Response.Status.CONFLICT).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -77,7 +81,8 @@ public class SubjectController {
             schoolAccessLocal.deleteSubject(title);
             return Response.ok().type(MediaType.TEXT_PLAIN)
                     .entity("The subject was deleted from the database.").build();
-        } catch (TitleNotFoundException e) {
+        }
+        catch (TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
@@ -95,7 +100,31 @@ public class SubjectController {
             //List studentModelList = schoolAccessLocal.findStudentsByLastName(lastName);
             SubjectModel subjectModel = schoolAccessLocal.findSubjectByTitle(title);
             return Response.ok(subjectModel).build();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
+    }
+
+
+    @PATCH
+    @Path("addstudenttosubject")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"application/JSON"})
+    public Response addStudentToSubject(@QueryParam("studentemail") String studentEmail,
+                                        @QueryParam("title") String title) {
+
+        try {
+            SubjectModel subjectModel = schoolAccessLocal.addStudentToSubject(studentEmail, title);
+            return Response.ok(subjectModel).build();
+        }
+        catch (EmailNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+        catch (TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
