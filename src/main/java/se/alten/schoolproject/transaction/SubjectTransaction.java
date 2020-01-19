@@ -1,6 +1,8 @@
 package se.alten.schoolproject.transaction;
 
+import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
 import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.TitleNotFoundException;
@@ -77,6 +79,43 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         catch (NoResultException e) {
             throw new TitleNotFoundException(title);
         }
+
+    }
+
+
+    public Subject addStudentToSubject(String title, Student student) throws TitleNotFoundException {
+
+        try {
+            Subject subject = findSubjectByTitle(title);
+
+            subject.getStudents().add(student);
+
+            entityManager.merge(subject);
+
+            return subject;
+        }
+        catch (NoResultException e) {
+            throw new TitleNotFoundException(title);
+        }
+
+    }
+
+
+    public Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException {
+
+        try {
+            Subject subject = findSubjectByTitle(title);
+
+            subject.setTeacher(teacher);
+
+            entityManager.merge(subject);
+
+            return subject;
+        }
+        catch (NoResultException e) {
+            throw new TitleNotFoundException(title);
+        }
+
     }
 
 }

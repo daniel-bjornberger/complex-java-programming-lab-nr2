@@ -23,4 +23,6 @@ public interface PersonTransactionAccess {
 
     List findPersonsByLastName(String lastName);
 
+    Person findPersonByEmail(String email) throws EmailNotFoundException;
+
 }

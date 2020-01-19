@@ -1,17 +1,16 @@
 package se.alten.schoolproject.transaction;
 
 import se.alten.schoolproject.entity.Person;
+import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.DuplicateEmailException;
 import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
+import se.alten.schoolproject.exceptions.TitleNotFoundException;
 
 //import javax.ejb.Stateless;
 //import javax.enterprise.inject.Default;
 //import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 /*@Stateless
@@ -123,6 +122,21 @@ public abstract class PersonTransaction implements PersonTransactionAccess {
                 .createQuery("SELECT p FROM " + this.personType + " p WHERE p.lastName = :lastname")
                 .setParameter("lastname", lastName)
                 .getResultList();
+
+    }
+
+
+    public Person findPersonByEmail(String email) throws EmailNotFoundException {
+
+        try {
+            return (Person) entityManager
+                    .createQuery("SELECT p FROM " + this.personType + " p WHERE p.email = :email")
+                    .setParameter("email", email)
+                    .getSingleResult();
+        }
+        catch (NoResultException e) {
+            throw new EmailNotFoundException(email);
+        }
 
     }
 

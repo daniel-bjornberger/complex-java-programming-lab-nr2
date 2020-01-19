@@ -131,6 +131,29 @@ public class SubjectController {
 
     }
 
+
+    @PATCH
+    @Path("addteachertosubject")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"application/JSON"})
+    public Response addTeacherToSubject(@QueryParam("teacheremail") String teacherEmail,
+                                        @QueryParam("title") String title) {
+
+        try {
+            SubjectModel subjectModel = schoolAccessLocal.addTeacherToSubject(teacherEmail, title);
+            return Response.ok(subjectModel).build();
+        }
+        catch (EmailNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+        catch (TitleNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
+    }
+
 }
 
 
