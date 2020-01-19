@@ -2,6 +2,7 @@ package se.alten.schoolproject.transaction;
 
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
+import se.alten.schoolproject.exceptions.TitleNotFoundException;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -13,6 +14,8 @@ public interface SubjectTransactionAccess {
 
     void addSubject(Subject subject) throws DuplicateTitleException;
 
-    List<Subject> getSubjectByName(List<String> subject);
+    //List<Subject> getSubjectByName(List<String> subject);
+
+    void deleteSubject(String title) throws TitleNotFoundException;
 
 }

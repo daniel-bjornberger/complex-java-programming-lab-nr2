@@ -38,7 +38,7 @@ public interface SchoolAccessLocal {
 
     SubjectModel addSubject(String subjectModel) throws DuplicateTitleException, MissingTitleValueException;
 
-    //void deleteSubject(String title) throws TitleNotFoundException;
+    void deleteSubject(String title) throws TitleNotFoundException;
 
 }
 

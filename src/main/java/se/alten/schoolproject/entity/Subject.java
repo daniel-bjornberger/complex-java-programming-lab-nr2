@@ -1,15 +1,10 @@
 package se.alten.schoolproject.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import se.alten.schoolproject.model.SubjectModel;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 

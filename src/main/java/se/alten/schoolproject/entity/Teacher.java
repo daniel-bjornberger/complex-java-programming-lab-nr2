@@ -29,4 +29,10 @@ public class Teacher extends Person implements Serializable {
 
     }
 
+
+    /*@Override
+    public void setSubjects(Set<Subject> subjects) {
+
+    }*/
+
 }

@@ -30,11 +30,11 @@ public class PersonModel {
         this.lastname  = person.getLastName();
         this.email     = person.getEmail();
 
-        /*for (Object subject: person.getSubjects()) {
+        for (Object subject: person.getSubjects()) {
             this.subjects.add(((Subject) subject).getTitle());
-        }*/
+        }
 
-        //this.subjects  = student.getSubjects();
+        //this.subjects  = person.getSubjects();
 
     }
 

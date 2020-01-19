@@ -18,10 +18,10 @@ public abstract class Person {
 
     //private static final long serialVersionUID = 6544404357432832048L;
 
-    public enum PersonType {
+/*    public enum PersonType {
         STUDENT,
         TEACHER
-    }
+    }*/
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,11 +54,11 @@ public abstract class Person {
         this.lastName  = personModel.getLastname();
         this.email     = personModel.getEmail();
 
-        /*for (Object subjectString: personModel.getSubjects()) {
-            this.subject.add(new Subject((String) subjectString));
-        }*/
-
     }
+
+    public abstract Set<Subject> getSubjects();
+
+    //public abstract void setSubjects(Set<Subject> subjects);
 
 }
 

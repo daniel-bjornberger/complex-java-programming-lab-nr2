@@ -1,15 +1,14 @@
 package se.alten.schoolproject.transaction;
 
-import org.hibernate.Session;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
+import se.alten.schoolproject.exceptions.EmailNotFoundException;
+import se.alten.schoolproject.exceptions.TitleNotFoundException;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Stateless
 @Default
@@ -41,7 +40,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
     }
 
 
-    @Override
+    /*@Override
     public List<Subject> getSubjectByName(List<String> subject) {
 
         String queryStr = "SELECT sub FROM Subject sub WHERE sub.title IN :subject";
@@ -50,6 +49,18 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
         return query.getResultList();
 
-     }
+     }*/
+
+    public void deleteSubject(String title) throws TitleNotFoundException {
+
+        Query query = entityManager.createQuery("DELETE FROM Subject s WHERE s.title = :title");
+
+        int numberOfSubjectsDeleted = query.setParameter("title", title).executeUpdate();
+
+        if (numberOfSubjectsDeleted == 0) {
+            throw new TitleNotFoundException(title);
+        }
+
+    }
 
 }

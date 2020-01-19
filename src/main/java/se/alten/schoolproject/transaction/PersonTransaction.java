@@ -7,7 +7,7 @@ import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
 
 //import javax.ejb.Stateless;
 //import javax.enterprise.inject.Default;
-import javax.inject.Inject;
+//import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -23,7 +23,7 @@ public abstract class PersonTransaction implements PersonTransactionAccess {
 
     private String personType;
 
-    @Inject
+    //@Inject
     public PersonTransaction(String personType) {
         this.personType = personType;
     }
