@@ -44,7 +44,11 @@ public interface SchoolAccessLocal {
 
     SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException;
 
-    SubjectModel addTeacherToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException;
+    SubjectModel addTeacherToSubject(String teacherEmail, String title) throws EmailNotFoundException, TitleNotFoundException;
+
+    void removeStudentFromSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonNotRegisteredToSubjectException;
+
+    void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
 
 }
 

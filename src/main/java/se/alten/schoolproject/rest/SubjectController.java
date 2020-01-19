@@ -154,6 +154,57 @@ public class SubjectController {
 
     }
 
+
+    @DELETE
+    @Path("removestudentfromsubject")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"text/plain"})
+    public Response removeStudentFromSubject(@QueryParam("studentemail") String studentEmail,
+                                             @QueryParam("title") String title) {
+
+        try {
+            schoolAccessLocal.removeStudentFromSubject(studentEmail, title);
+            return Response.ok().type(MediaType.TEXT_PLAIN)
+                    .entity("The student was removed from the subject " + title + ".").build();
+        }
+        catch (EmailNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+        catch (TitleNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+        catch (PersonNotRegisteredToSubjectException e) {
+            return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
+    }
+
+
+    @DELETE
+    @Path("removeteacherfromsubject")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"text/plain"})
+    public Response removeTeacherFromSubject(@QueryParam("title") String title) {
+
+        try {
+            schoolAccessLocal.removeTeacherFromSubject(title);
+            return Response.ok().type(MediaType.TEXT_PLAIN)
+                    .entity("The teacher was removed from the subject " + title + ".").build();
+        }
+        catch (TitleNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+        catch (PersonNotRegisteredToSubjectException e) {
+            return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+
+    }
+
 }
 
 

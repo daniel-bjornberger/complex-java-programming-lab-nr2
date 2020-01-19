@@ -440,6 +440,26 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     }
 
+
+    @Override
+    public void removeStudentFromSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonNotRegisteredToSubjectException {
+
+        Student student = (Student) studentTransactionAccess.findPersonByEmail(studentEmail);
+
+        subjectTransactionAccess.removeStudentFromSubject(title, student);
+
+    }
+
+
+    @Override
+    public void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException {
+
+        //Teacher teacher = (Teacher) teacherTransactionAccess.findPersonByEmail(teacherEmail);
+
+        subjectTransactionAccess.removeTeacherFromSubject(title);
+
+    }
+
 }
 
 
