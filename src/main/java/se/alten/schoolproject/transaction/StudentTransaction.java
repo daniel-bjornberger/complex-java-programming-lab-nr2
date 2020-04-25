@@ -49,9 +49,10 @@ public class StudentTransaction implements StudentTransactionAccess {
 
     @Override
     public void updateStudent(Student student) throws EmailNotFoundException {
-        Query updateQuery = entityManager.createNativeQuery("UPDATE student SET firstname = :firstname, lastname = :lastname WHERE email = :email", Student.class);
-        int numberOfStudentsUpdated = updateQuery.setParameter("firstname", student.getFirstName())
-                .setParameter("lastname", student.getLastName())
+        int numberOfStudentsUpdated = entityManager
+                .createQuery("UPDATE Student SET firstName = :first_name, lastName = :last_name WHERE email = :email")
+                .setParameter("first_name", student.getFirstName())
+                .setParameter("last_name", student.getLastName())
                 .setParameter("email", student.getEmail())
                 .executeUpdate();
         if (numberOfStudentsUpdated == 0) {
@@ -65,8 +66,8 @@ public class StudentTransaction implements StudentTransactionAccess {
         Student studentFound;
         try {
             studentFound = (Student) entityManager
-                    .createQuery("SELECT p FROM Student p WHERE p.lastName = :lastname AND p.email = :email")
-                    .setParameter("lastname", student.getLastName())
+                    .createQuery("SELECT p FROM Student p WHERE p.lastName = :last_name AND p.email = :email")
+                    .setParameter("last_name", student.getLastName())
                     .setParameter("email", student.getEmail())
                     .getSingleResult();
         }
@@ -74,9 +75,9 @@ public class StudentTransaction implements StudentTransactionAccess {
             throw new LastNameAndEmailNotFoundException(student.getLastName(), student.getEmail());
         }
         Query query = entityManager
-                .createQuery("UPDATE Student SET firstname = :studentfirstname WHERE lastName = :lastname AND email = :email");
-        query.setParameter("studentfirstname", student.getFirstName())
-                .setParameter("lastname", studentFound.getLastName())
+                .createQuery("UPDATE Student SET firstName = :first_name WHERE lastName = :last_name AND email = :email");
+        query.setParameter("first_name", student.getFirstName())
+                .setParameter("last_name", studentFound.getLastName())
                 .setParameter("email", studentFound.getEmail())
                 .executeUpdate();
     }

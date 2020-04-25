@@ -1,7 +1,6 @@
 package se.alten.schoolproject.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import se.alten.schoolproject.model.StudentModel;
 
 import javax.persistence.*;
@@ -9,9 +8,10 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Student")
 @Table(name = "student")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Student implements Serializable {
 
@@ -31,7 +31,7 @@ public class Student implements Serializable {
     @Column(name = "email", unique = true)
     private String email;
 
-    @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST)
     private Set<Subject> subjects = new HashSet<>();
 
 

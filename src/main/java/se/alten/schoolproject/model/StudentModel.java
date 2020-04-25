@@ -2,8 +2,9 @@ package se.alten.schoolproject.model;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.exceptions.MissingPersonValueException;
@@ -12,7 +13,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class StudentModel implements Serializable {
 

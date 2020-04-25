@@ -8,9 +8,10 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Teacher")
 @Table(name = "teacher")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Teacher implements Serializable {
 
@@ -30,7 +31,7 @@ public class Teacher implements Serializable {
     @Column(name = "email", unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "teacher", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.PERSIST)
     private Set<Subject> subjects = new HashSet<>();
 
 

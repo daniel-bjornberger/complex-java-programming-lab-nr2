@@ -12,21 +12,12 @@ import java.util.List;
 
 @Local
 public interface SubjectTransactionAccess {
-
     List<?> listAllSubjects();
-
     void addSubject(Subject subject) throws DuplicateTitleException;
-
     void deleteSubject(String title) throws TitleNotFoundException;
-
     Subject findSubjectByTitle(String title) throws TitleNotFoundException;
-
     Subject addStudentToSubject(String title, Student student) throws TitleNotFoundException;
-
     Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException;
-
     void removeStudentFromSubject(String title, Student student) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
-
     void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
-
 }

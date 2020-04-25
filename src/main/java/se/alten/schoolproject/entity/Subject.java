@@ -8,9 +8,10 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Subject")
 @Table(name = "subject")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Subject implements Serializable {
 
@@ -24,13 +25,13 @@ public class Subject implements Serializable {
     @Column(name = "title", unique = true)
     private String title;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "subject_student",
             joinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "stud_id", referencedColumnName = "id"))
     private Set<Student> students = new HashSet<>();
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "subject_teacher",
             joinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "teach_id", referencedColumnName = "id"))

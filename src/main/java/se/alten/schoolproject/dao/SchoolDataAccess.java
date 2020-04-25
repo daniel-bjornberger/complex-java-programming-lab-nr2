@@ -6,8 +6,8 @@ import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.*;
 import se.alten.schoolproject.model.StudentModel;
-import se.alten.schoolproject.model.TeacherModel;
 import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.model.TeacherModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import se.alten.schoolproject.transaction.SubjectTransactionAccess;
 import se.alten.schoolproject.transaction.TeacherTransactionAccess;
@@ -190,6 +190,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     public void deleteSubject(String title) throws TitleNotFoundException {
         subjectTransactionAccess.deleteSubject(title);
     }
+
 
     @Override
     public SubjectModel findSubjectByTitle(String title) throws TitleNotFoundException {
