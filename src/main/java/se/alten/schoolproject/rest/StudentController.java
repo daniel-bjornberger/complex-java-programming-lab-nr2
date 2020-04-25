@@ -6,7 +6,7 @@ import se.alten.schoolproject.exceptions.DuplicateEmailException;
 import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
 import se.alten.schoolproject.exceptions.MissingPersonValueException;
-import se.alten.schoolproject.model.PersonModel;
+import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -28,15 +28,13 @@ public class StudentController {
     @Path("/getallstudents")
     @Produces({"application/JSON"})
     public Response getAllStudents() {
-
         try {
-            List studentModelList = schoolAccessLocal.listAllStudents();
+            List<?> studentModelList = schoolAccessLocal.listAllStudents();
             return Response.ok(studentModelList).build();
         }
         catch (Exception e) {
             return Response.status(Response.Status.CONFLICT).build();
         }
-
     }
 
 
@@ -45,10 +43,9 @@ public class StudentController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({"application/JSON"})
     public Response addStudent(String studentJsonString) {
-
         try {
-            PersonModel personModel = schoolAccessLocal.addStudent(studentJsonString);
-            return Response.ok(personModel).build();
+            StudentModel studentModel = schoolAccessLocal.addStudent(studentJsonString);
+            return Response.ok(studentModel).build();
         }
         catch (MissingPersonValueException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
@@ -61,7 +58,6 @@ public class StudentController {
         catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-
     }
 
 
@@ -70,7 +66,6 @@ public class StudentController {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces({"text/plain"})
     public Response deleteStudent(@PathParam("email") String email) {
-
         try {
             schoolAccessLocal.deleteStudent(email);
             return Response.ok().type(MediaType.TEXT_PLAIN)
@@ -80,7 +75,6 @@ public class StudentController {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
-
     }
 
 
@@ -89,10 +83,9 @@ public class StudentController {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces({"application/JSON"})
     public Response updateStudent(@QueryParam("firstname") String firstName, @QueryParam("lastname") String lastName, @QueryParam("email") String email) {
-
         try {
-            PersonModel personModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
-            return Response.ok(personModel).build();
+            StudentModel studentModel = schoolAccessLocal.updateStudent(firstName, lastName, email);
+            return Response.ok(studentModel).build();
         }
         catch (MissingPersonValueException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
@@ -102,7 +95,6 @@ public class StudentController {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
-
     }
 
 
@@ -111,10 +103,9 @@ public class StudentController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({"application/JSON"})
     public Response updateStudentFirstName(String studentJsonString) {
-
         try {
-            PersonModel personModel = schoolAccessLocal.updateStudentFirstName(studentJsonString);
-            return Response.ok(personModel).build();
+            StudentModel studentModel = schoolAccessLocal.updateStudentFirstName(studentJsonString);
+            return Response.ok(studentModel).build();
         }
         catch (MissingPersonValueException e) {
             return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
@@ -124,7 +115,6 @@ public class StudentController {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
-
     }
 
 
@@ -133,15 +123,13 @@ public class StudentController {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces({"application/JSON"})
     public Response findStudentsByLastName(@PathParam("lastname") String lastName) {
-
         try {
-            List studentModelList = schoolAccessLocal.findStudentsByLastName(lastName);
+            List<?> studentModelList = schoolAccessLocal.findStudentsByLastName(lastName);
             return Response.ok(studentModelList).build();
         }
         catch (Exception e) {
             return Response.status(Response.Status.CONFLICT).build();
         }
-
     }
 
 }

@@ -1,7 +1,8 @@
 package se.alten.schoolproject.entity;
 
-import lombok.*;
-import se.alten.schoolproject.model.PersonModel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import se.alten.schoolproject.model.StudentModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,11 +11,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "student")
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 7311641107269987837L;
@@ -24,25 +22,23 @@ public class Student implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "firstname")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "lastname")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "email", unique = true)
     private String email;
 
-    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Set<Subject> subjects = new HashSet<>();
 
 
-    public Student(PersonModel personModel) {
-
-        this.firstName = personModel.getFirstname();
-        this.lastName  = personModel.getLastname();
-        this.email     = personModel.getEmail();
-
+    public Student(StudentModel studentModel) {
+        this.firstName = studentModel.getFirstName();
+        this.lastName  = studentModel.getLastName();
+        this.email     = studentModel.getEmail();
     }
 
 }

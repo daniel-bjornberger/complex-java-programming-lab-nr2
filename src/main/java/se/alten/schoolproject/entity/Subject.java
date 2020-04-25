@@ -10,11 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "subject")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class Subject implements Serializable {
 
     private static final long serialVersionUID = 7606014062226993082L;
@@ -27,13 +24,13 @@ public class Subject implements Serializable {
     @Column(name = "title", unique = true)
     private String title;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "subject_student",
             joinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "stud_id", referencedColumnName = "id"))
     private Set<Student> students = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "subject_teacher",
             joinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "teach_id", referencedColumnName = "id"))

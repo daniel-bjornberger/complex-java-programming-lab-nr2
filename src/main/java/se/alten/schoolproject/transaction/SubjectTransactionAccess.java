@@ -13,7 +13,7 @@ import java.util.List;
 @Local
 public interface SubjectTransactionAccess {
 
-    List listAllSubjects();
+    List<?> listAllSubjects();
 
     void addSubject(Subject subject) throws DuplicateTitleException;
 

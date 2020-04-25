@@ -5,11 +5,13 @@ import se.alten.schoolproject.exceptions.DuplicateEmailException;
 import se.alten.schoolproject.exceptions.EmailNotFoundException;
 import se.alten.schoolproject.exceptions.LastNameAndEmailNotFoundException;
 
+import javax.ejb.Local;
 import java.util.List;
 
+@Local
 public interface StudentTransactionAccess {
 
-    List listAllStudents();
+    List<?> listAllStudents();
 
     void addStudent(Student student) throws DuplicateEmailException;
 
@@ -19,7 +21,7 @@ public interface StudentTransactionAccess {
 
     void updateStudentFirstName(Student student) throws LastNameAndEmailNotFoundException;
 
-    List findStudentsByLastName(String lastName);
+    List<?> findStudentsByLastName(String lastName);
 
     Student findStudentByEmail(String email) throws EmailNotFoundException;
 

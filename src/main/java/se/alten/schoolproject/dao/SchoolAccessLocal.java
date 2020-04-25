@@ -1,7 +1,8 @@
 package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.exceptions.*;
-import se.alten.schoolproject.model.PersonModel;
+import se.alten.schoolproject.model.TeacherModel;
+import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
 
 import javax.ejb.Local;
@@ -10,31 +11,31 @@ import java.util.List;
 @Local
 public interface SchoolAccessLocal {
 
-    List listAllStudents() throws Exception;
+    List<?> listAllStudents() throws Exception;
 
-    List listAllTeachers() throws Exception;
+    List<?> listAllTeachers() throws Exception;
 
-    PersonModel addStudent(String studentJsonString) throws MissingPersonValueException, DuplicateEmailException;
+    StudentModel addStudent(String studentJsonString) throws MissingPersonValueException, DuplicateEmailException;
 
-    PersonModel addTeacher(String teacherJsonString) throws MissingPersonValueException, DuplicateEmailException;
+    TeacherModel addTeacher(String teacherJsonString) throws MissingPersonValueException, DuplicateEmailException;
 
     void deleteStudent(String email) throws EmailNotFoundException;
 
     void deleteTeacher(String email) throws EmailNotFoundException;
 
-    PersonModel updateStudent(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException;
+    StudentModel updateStudent(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException;
 
-    PersonModel updateTeacher(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException;
+    TeacherModel updateTeacher(String firstName, String lastName, String email) throws MissingPersonValueException, EmailNotFoundException;
 
-    PersonModel updateStudentFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
+    StudentModel updateStudentFirstName(String studentJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
 
-    PersonModel updateTeacherFirstName(String teacherJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
+    TeacherModel updateTeacherFirstName(String teacherJsonString) throws MissingPersonValueException, LastNameAndEmailNotFoundException;
 
-    List findStudentsByLastName(String lastName);
+    List<?> findStudentsByLastName(String lastName);
 
-    List findTeachersByLastName(String lastName);
+    List<?> findTeachersByLastName(String lastName);
 
-    List listAllSubjects();
+    List<?> listAllSubjects();
 
     SubjectModel addSubject(String subjectModel) throws DuplicateTitleException, MissingTitleValueException;
 

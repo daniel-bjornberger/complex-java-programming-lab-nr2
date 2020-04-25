@@ -19,7 +19,7 @@ public class TeacherTransaction implements TeacherTransactionAccess {
 
 
     @Override
-    public List listAllTeachers() {
+    public List<?> listAllTeachers() {
 
         Query query = entityManager.createQuery("SELECT p from Teacher p");
         return query.getResultList();
@@ -58,10 +58,10 @@ public class TeacherTransaction implements TeacherTransactionAccess {
     @Override
     public void updateTeacher(Teacher teacher) throws EmailNotFoundException {
 
-        Query updateQuery = entityManager.createNativeQuery("UPDATE teacher SET firstname = :firstname, lastname = :lastname WHERE email = :email", Teacher.class);
+        Query updateQuery = entityManager.createNativeQuery("UPDATE teacher SET firstName = :first_name, lastname = :last_name WHERE email = :email", Teacher.class);
 
-        int numberOfTeachersUpdated = updateQuery.setParameter("firstname", teacher.getFirstName())
-                .setParameter("lastname", teacher.getLastName())
+        int numberOfTeachersUpdated = updateQuery.setParameter("first_name", teacher.getFirstName())
+                .setParameter("last_name", teacher.getLastName())
                 .setParameter("email", teacher.getEmail())
                 .executeUpdate();
 
@@ -79,8 +79,8 @@ public class TeacherTransaction implements TeacherTransactionAccess {
 
         try {
             teacherFound = (Teacher) entityManager
-                    .createQuery("SELECT p FROM Teacher p WHERE p.lastName = :lastname AND p.email = :email")
-                    .setParameter("lastname", teacher.getLastName())
+                    .createQuery("SELECT p FROM Teacher p WHERE p.lastName = :last_name AND p.email = :email")
+                    .setParameter("last_name", teacher.getLastName())
                     .setParameter("email", teacher.getEmail())
                     .getSingleResult();
         }
@@ -89,10 +89,10 @@ public class TeacherTransaction implements TeacherTransactionAccess {
         }
 
         Query query = entityManager
-                .createQuery("UPDATE Teacher SET firstname = :teacherfirstname WHERE lastName = :lastname AND email = :email");
+                .createQuery("UPDATE Teacher SET firstName = :teacher_first_name WHERE lastName = :last_name AND email = :email");
 
-        query.setParameter("teacherfirstname", teacher.getFirstName())
-                .setParameter("lastname", teacherFound.getLastName())
+        query.setParameter("teacher_first_name", teacher.getFirstName())
+                .setParameter("last_name", teacherFound.getLastName())
                 .setParameter("email", teacherFound.getEmail())
                 .executeUpdate();
 
@@ -100,11 +100,11 @@ public class TeacherTransaction implements TeacherTransactionAccess {
 
 
     @Override
-    public List findTeachersByLastName(String lastName) {
+    public List<?> findTeachersByLastName(String lastName) {
 
         return entityManager
-                .createQuery("SELECT p FROM Teacher p WHERE p.lastName = :lastname")
-                .setParameter("lastname", lastName)
+                .createQuery("SELECT p FROM Teacher p WHERE p.lastName = :last_name")
+                .setParameter("last_name", lastName)
                 .getResultList();
 
     }
