@@ -104,6 +104,9 @@ public class SubjectController {
         catch (EmailNotFoundException | TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
+        } catch (PersonAlreadyRegisteredToSubjectException e) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
         }
     }
 
@@ -120,6 +123,9 @@ public class SubjectController {
         }
         catch (EmailNotFoundException | TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        } catch (PersonAlreadyRegisteredToSubjectException e) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.TEXT_PLAIN)
                     .entity(e.getMessage()).build();
         }
     }

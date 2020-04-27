@@ -26,8 +26,8 @@ public interface SchoolAccessLocal {
     SubjectModel addSubject(String subjectModel) throws DuplicateTitleException, MissingTitleValueException;
     void deleteSubject(String title) throws TitleNotFoundException;
     SubjectModel findSubjectByTitle(String title) throws TitleNotFoundException;
-    SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException;
-    SubjectModel addTeacherToSubject(String teacherEmail, String title) throws EmailNotFoundException, TitleNotFoundException;
+    SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonAlreadyRegisteredToSubjectException;
+    SubjectModel addTeacherToSubject(String teacherEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonAlreadyRegisteredToSubjectException;
     void removeStudentFromSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonNotRegisteredToSubjectException;
     void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
 }

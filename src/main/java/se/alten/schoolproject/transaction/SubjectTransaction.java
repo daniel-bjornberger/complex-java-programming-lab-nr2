@@ -4,6 +4,7 @@ import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
+import se.alten.schoolproject.exceptions.PersonAlreadyRegisteredToSubjectException;
 import se.alten.schoolproject.exceptions.PersonNotRegisteredToSubjectException;
 import se.alten.schoolproject.exceptions.TitleNotFoundException;
 
@@ -62,9 +63,13 @@ public class SubjectTransaction implements SubjectTransactionAccess{
     }
 
 
-    public Subject addStudentToSubject(String title, Student student) throws TitleNotFoundException {
+    public Subject addStudentToSubject(String title, Student student) throws TitleNotFoundException, PersonAlreadyRegisteredToSubjectException {
         try {
             Subject subject = findSubjectByTitle(title);
+            if (subject.getStudents().contains(student)) {
+                throw new PersonAlreadyRegisteredToSubjectException("The student '" + student.getFirstName() +
+                        " " + student.getLastName() + "' is already registered to the subject " +  title + ".");
+            }
             subject.getStudents().add(student);
             student.getSubjects().add(subject);
             entityManager.merge(subject);
@@ -74,12 +79,19 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         catch (NoResultException e) {
             throw new TitleNotFoundException(title);
         }
+        catch (PersonAlreadyRegisteredToSubjectException e) {
+            throw e;
+        }
     }
 
 
-    public Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException {
+    public Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException, PersonAlreadyRegisteredToSubjectException {
         try {
             Subject subject = findSubjectByTitle(title);
+            if (subject.getTeacher().getEmail().equals(teacher.getEmail())) {
+                throw new PersonAlreadyRegisteredToSubjectException("The teacher '" + teacher.getFirstName() +
+                        " " + teacher.getLastName() + "' is already registered to the subject " +  title + ".");
+            }
             subject.setTeacher(teacher);
             teacher.getSubjects().add(subject);
             entityManager.merge(subject);
@@ -88,6 +100,8 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         }
         catch (NoResultException e) {
             throw new TitleNotFoundException(title);
+        } catch (PersonAlreadyRegisteredToSubjectException e) {
+            throw e;
         }
     }
 

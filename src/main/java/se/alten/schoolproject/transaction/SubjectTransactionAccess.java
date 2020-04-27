@@ -4,6 +4,7 @@ import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.exceptions.DuplicateTitleException;
+import se.alten.schoolproject.exceptions.PersonAlreadyRegisteredToSubjectException;
 import se.alten.schoolproject.exceptions.PersonNotRegisteredToSubjectException;
 import se.alten.schoolproject.exceptions.TitleNotFoundException;
 
@@ -16,8 +17,8 @@ public interface SubjectTransactionAccess {
     void addSubject(Subject subject) throws DuplicateTitleException;
     void deleteSubject(String title) throws TitleNotFoundException;
     Subject findSubjectByTitle(String title) throws TitleNotFoundException;
-    Subject addStudentToSubject(String title, Student student) throws TitleNotFoundException;
-    Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException;
+    Subject addStudentToSubject(String title, Student student) throws TitleNotFoundException, PersonAlreadyRegisteredToSubjectException;
+    Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException, PersonAlreadyRegisteredToSubjectException;
     void removeStudentFromSubject(String title, Student student) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
     void removeTeacherFromSubject(String title) throws TitleNotFoundException, PersonNotRegisteredToSubjectException;
 }

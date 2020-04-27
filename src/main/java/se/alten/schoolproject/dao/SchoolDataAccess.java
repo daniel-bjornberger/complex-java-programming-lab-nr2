@@ -199,14 +199,14 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
 
     @Override
-    public SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException {
+    public SubjectModel addStudentToSubject(String studentEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonAlreadyRegisteredToSubjectException {
         Student student = studentTransactionAccess.findStudentByEmail(studentEmail);
         return new SubjectModel(subjectTransactionAccess.addStudentToSubject(title, student));
     }
 
 
     @Override
-    public SubjectModel addTeacherToSubject(String teacherEmail, String title) throws EmailNotFoundException, TitleNotFoundException {
+    public SubjectModel addTeacherToSubject(String teacherEmail, String title) throws EmailNotFoundException, TitleNotFoundException, PersonAlreadyRegisteredToSubjectException {
         Teacher teacher = teacherTransactionAccess.findTeacherByEmail(teacherEmail);
         return new SubjectModel(subjectTransactionAccess.addTeacherToSubject(title, teacher));
     }
