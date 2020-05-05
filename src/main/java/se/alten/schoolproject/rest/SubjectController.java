@@ -66,7 +66,7 @@ public class SubjectController {
         try {
             schoolAccessLocal.deleteSubject(title);
             return Response.ok().type(MediaType.TEXT_PLAIN)
-                    .entity("The subject was deleted from the database.").build();
+                    .entity("The subject '" + title + "' was deleted from the database.").build();
         }
         catch (TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
@@ -140,7 +140,7 @@ public class SubjectController {
         try {
             schoolAccessLocal.removeStudentFromSubject(studentEmail, title);
             return Response.ok().type(MediaType.TEXT_PLAIN)
-                    .entity("The student was removed from the subject " + title + ".").build();
+                    .entity("The student was removed from the subject '" + title + "'.").build();
         }
         catch (EmailNotFoundException | TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
@@ -160,7 +160,7 @@ public class SubjectController {
         try {
             schoolAccessLocal.removeTeacherFromSubject(title);
             return Response.ok().type(MediaType.TEXT_PLAIN)
-                    .entity("The teacher was removed from the subject " + title + ".").build();
+                    .entity("The teacher was removed from the subject '" + title + "'.").build();
         }
         catch (TitleNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)

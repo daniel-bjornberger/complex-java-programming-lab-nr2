@@ -20,13 +20,20 @@ public class StudentTransaction implements StudentTransactionAccess {
 
     @Override
     public List<?> listAllStudents() {
-        Query query = entityManager.createQuery("SELECT p from Student p");
+        Query query = entityManager.createQuery("SELECT s from Student s");
         return query.getResultList();
     }
 
 
     @Override
     public void addStudent(Student student) throws DuplicateEmailException {
+        long numberOfTeachersWithSameEmail = entityManager
+                .createQuery("SELECT COUNT(t) FROM Teacher t WHERE t.email = :email", Long.class)
+                .setParameter("email", student.getEmail())
+                .getSingleResult();
+        if (numberOfTeachersWithSameEmail > 0) {
+            throw new DuplicateEmailException(student.getEmail());
+        }
         try {
             entityManager.persist(student);
             entityManager.flush();
@@ -39,7 +46,7 @@ public class StudentTransaction implements StudentTransactionAccess {
 
     @Override
     public void deleteStudent(String email) throws EmailNotFoundException {
-        Query query = entityManager.createQuery("DELETE FROM Student p WHERE p.email = :email");
+        Query query = entityManager.createQuery("DELETE FROM Student s WHERE s.email = :email");
         int numberOfStudentsDeleted = query.setParameter("email", email).executeUpdate();
         if (numberOfStudentsDeleted == 0) {
             throw new EmailNotFoundException(email);
@@ -66,7 +73,7 @@ public class StudentTransaction implements StudentTransactionAccess {
         Student studentFound;
         try {
             studentFound = (Student) entityManager
-                    .createQuery("SELECT p FROM Student p WHERE p.lastName = :last_name AND p.email = :email")
+                    .createQuery("SELECT s FROM Student s WHERE s.lastName = :last_name AND s.email = :email")
                     .setParameter("last_name", student.getLastName())
                     .setParameter("email", student.getEmail())
                     .getSingleResult();
@@ -86,7 +93,7 @@ public class StudentTransaction implements StudentTransactionAccess {
     @Override
     public List<?> findStudentsByLastName(String lastName) {
         return entityManager
-                .createQuery("SELECT p FROM Student p WHERE p.lastName = :lastname")
+                .createQuery("SELECT s FROM Student s WHERE s.lastName = :lastname")
                 .setParameter("lastname", lastName)
                 .getResultList();
     }
@@ -96,7 +103,7 @@ public class StudentTransaction implements StudentTransactionAccess {
     public Student findStudentByEmail(String email) throws EmailNotFoundException {
         try {
             return (Student) entityManager
-                    .createQuery("SELECT p FROM Student p WHERE p.email = :email")
+                    .createQuery("SELECT s FROM Student s WHERE s.email = :email")
                     .setParameter("email", email)
                     .getSingleResult();
         }

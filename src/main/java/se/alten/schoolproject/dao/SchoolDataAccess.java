@@ -168,6 +168,20 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
 
+    public StudentModel findStudentByEmail(String email) throws EmailNotFoundException {
+        return new StudentModel(studentTransactionAccess.findStudentByEmail(email));
+    }
+
+
+    public TeacherModel findTeacherByEmail(String email) throws EmailNotFoundException {
+        return new TeacherModel(teacherTransactionAccess.findTeacherByEmail(email));
+    }
+
+
+    //StudentModel findStudentByEmail(String email) throws EmailNotFoundException;
+    //TeacherModel findTeacherByEmail(String email) throws EmailNotFoundException;
+
+
     @Override
     public List<?> listAllSubjects() {
         List<?> subjectList = subjectTransactionAccess.listAllSubjects();

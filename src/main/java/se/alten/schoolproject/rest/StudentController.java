@@ -132,4 +132,20 @@ public class StudentController {
         }
     }
 
+
+    @GET
+    @Path("findstudentbyemail/{email}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces({"application/JSON"})
+    public Response findStudentByEmail(@PathParam("email") String email) {
+        try {
+            StudentModel studentModel = schoolAccessLocal.findStudentByEmail(email);
+            return Response.ok(studentModel).build();
+        }
+        catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN)
+                    .entity(e.getMessage()).build();
+        }
+    }
+
 }

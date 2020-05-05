@@ -68,7 +68,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
             Subject subject = findSubjectByTitle(title);
             if (subject.getStudents().contains(student)) {
                 throw new PersonAlreadyRegisteredToSubjectException("The student '" + student.getFirstName() +
-                        " " + student.getLastName() + "' is already registered to the subject " +  title + ".");
+                        " " + student.getLastName() + "' is already registered to the subject '" +  title + "'.");
             }
             subject.getStudents().add(student);
             student.getSubjects().add(subject);
@@ -79,18 +79,15 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         catch (NoResultException e) {
             throw new TitleNotFoundException(title);
         }
-        catch (PersonAlreadyRegisteredToSubjectException e) {
-            throw e;
-        }
     }
 
 
     public Subject addTeacherToSubject(String title, Teacher teacher) throws TitleNotFoundException, PersonAlreadyRegisteredToSubjectException {
         try {
             Subject subject = findSubjectByTitle(title);
-            if (subject.getTeacher().getEmail().equals(teacher.getEmail())) {
+            if (subject.getTeacher() != null && subject.getTeacher().getEmail().equals(teacher.getEmail())) {
                 throw new PersonAlreadyRegisteredToSubjectException("The teacher '" + teacher.getFirstName() +
-                        " " + teacher.getLastName() + "' is already registered to the subject " +  title + ".");
+                        " " + teacher.getLastName() + "' is already registered to the subject '" +  title + "'.");
             }
             subject.setTeacher(teacher);
             teacher.getSubjects().add(subject);
@@ -100,8 +97,6 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         }
         catch (NoResultException e) {
             throw new TitleNotFoundException(title);
-        } catch (PersonAlreadyRegisteredToSubjectException e) {
-            throw e;
         }
     }
 
@@ -121,7 +116,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         }
         else {
             throw new PersonNotRegisteredToSubjectException("The student '" + student.getFirstName() +
-                    " " + student.getLastName() + "' is not registered to the subject " +  title + ".");
+                    " " + student.getLastName() + "' is not registered to the subject '" +  title + "'.");
         }
     }
 
